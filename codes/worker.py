@@ -73,7 +73,7 @@ class PageWoker(BaseClass, HttpBaseClass):
         article_title = re.search(r'(?<=<title>).*?(?=</title>)', article_url_response).group(0)
         article_body = \
             article_url_response[article_url_response.find("<!-- 正文开始 -->")+len("<!-- 正文开始 -->"):article_url_response.find("<!-- 正文结束 -->")]
-        post_time = 
+        post_time =
 
     def get_uid(self, base_url):
         """
