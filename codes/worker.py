@@ -22,9 +22,11 @@ class PageWoker(BaseClass, HttpBaseClass):
         # self.article_num = self.get_article_num(str_base_url_res=str_base_url_res)
         # self.get_uid(str_base_url_response=str_base_url_response)
 
-
-
-    def start(self):
+    def get_article_package(self):
+        """
+        article_package:  [(article_title, article_body, post_time), [...]]
+        :return:
+        """
         list_article_url = []
         for int_current_page in range(self.url_info['article_pages']):
             current_blog_page_url = "http://blog.sina.com.cn/s/articlelist_" + str(self.url_info['uid']) + "_0_" + str(int_current_page+1) + ".html"
@@ -32,14 +34,18 @@ class PageWoker(BaseClass, HttpBaseClass):
             str_response = self.getHttpContent(url=current_blog_page_url)
             now_article_url = re.findall(r'blog.sina.com.cn/s/blog_(\w+)\.html', str_response)
             list_article_url = list_article_url + now_article_url
+
+        list_article_url.remove('4cf7b4ec0100eudp')     # 移除意见反馈留言板的ID（博文的形式）
+        print "list_article_url" + str(list_article_url)
+        article_package = []       # 用来将所有的文章打包
         for now_article_id in list_article_url:
             # print now_article
             article_url = "http://blog.sina.com.cn/s/blog_" + now_article_id + ".html"
             article_url_response = self.getHttpContent(url=article_url)
-
-
-        return
-
+            now_article_title, now_article_body, now_post_time =\
+                self.get_article_info(article_url_response=article_url_response, blog_title=self.url_info['blog_title'])
+            article_package.append((now_article_title, now_article_body, now_post_time))
+        return article_package
 
     def get_blog_info(self, base_url=''):
         u"""
@@ -64,16 +70,29 @@ class PageWoker(BaseClass, HttpBaseClass):
             blog_title = str(self.url_info['uid']) + "的博客"
         return article_num, blog_title
 
-    def get_article_info(self, article_url_response):
+    def get_article_info(self, article_url_response, blog_title):
         u"""
         解析每篇文章，返回文章标题，内容，最后修改时间
         :param article_url_response:
-        :return:
+        :return: article_title, article_body, post_time
         """
-        article_title = re.search(r'(?<=<title>).*?(?=</title>)', article_url_response).group(0)
+        match = re.search(r'(?<=<title>).*?(?=</title>)', article_url_response)
+        if match:
+            article_title = match.group(0).replace("_" + blog_title, "").replace("_新浪博客", "")
+        else:
+            article_title = "未匹配的文章标题"
+        # print "article title??:" + article_title
         article_body = \
             article_url_response[article_url_response.find("<!-- 正文开始 -->")+len("<!-- 正文开始 -->"):article_url_response.find("<!-- 正文结束 -->")]
-        post_time =
+        print "article_body:" + article_body
+        match = re.search(r'(?<=<span class="time SG_txtc">\().*?(?=\)</span>)', article_url_response)     # 最后更新时间
+        if match:
+            post_time = match.group(0)
+        else:
+            post_time = "未知时间"
+        print "post_time:" + post_time
+
+        return article_title, article_body, post_time
 
     def get_uid(self, base_url):
         """

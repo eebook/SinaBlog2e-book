@@ -17,6 +17,8 @@ from baseclass import *
 class SinaBlog2ebook(object):
     def __init__(self):
         self.m_thread = 10      # 同时运行的线程数量, TODO
+        # url_info = ['article_num', 'uid', 'article_pages',
+        #  'worker', 'base_url', 'blog_title', 'article_list_url', 'guide']
         self.url_info = dict()
 
     def main_start(self):
@@ -41,7 +43,7 @@ class SinaBlog2ebook(object):
                 self.url_info['worker'].start()
                 chapter += 1
         print "main_start done!"
-        self.url_info['worker'].print_url_info()
+        self.url_info['worker'].print_url_info()        # 输出url_info的内容
 
     def get_url_info(self, raw_url):
         u"""
@@ -83,7 +85,7 @@ class SinaBlog2ebook(object):
                 print "ReadList.txt中给出的链接错误，程序终止"
                 exit(0)
             self.url_info['guide'] = u'成功匹配到博客地址{}，开始执行抓取任务'.format(self.url_info['base_url'])
-            self.url_info['articlelist_url'] = \
+            self.url_info['article_list_url'] = \
                 "http://blog.sina.com.cn/s/articlelist_" + str(self.url_info['uid']) + "_0_1.html"
 
         else:
