@@ -11,6 +11,7 @@ import urllib
 import time
 import re
 from codes.worker import *
+from codes.epubBuilder.epubBuilder import *
 from baseclass import *
 
 
@@ -34,16 +35,27 @@ class SinaBlog2ebook(object):
         read_list = open('./ReadList.txt', 'r')   # 该文件中存放要爬取的博客首页
         book_count = 1               # 生成的书的数量
         for line in read_list:       # 一行表示一本电子书
-            chapter = 1              # 可以把多个博客放在一本书中，用$符号分隔链接即可
-            for raw_url in line.split('$'):
-                print "debug:rawUrl" + raw_url
-                print u'正在制作第{}本电子书的第{}节'.format(book_count, chapter)
-                self.url_info = self.get_url_info(raw_url)
+            chapter = 1              # 可以把多个博客放在一本书中，用$符号分隔链接即可 TODO
+            article_package = []
+            raw_url = line
+            # for raw_url in line.split('$'):
+            # print "debug:rawUrl" + raw_url
+            print u'正在制作第{}本电子书的第{}节'.format(book_count, chapter)
+            self.url_info = self.get_url_info(raw_url)
+            # self.url_info['worker'].start()
+            chapter += 1
+            # print "now_article_package" + str(self.url_info['worker'].get_article_package)
+            article_package = self.url_info['worker'].get_article_package()
+            self.url_info['worker'].print_url_info()        # 输出url_info的内容
+            # print "article_package是什么" + str(article_package)
+            SinaBlog2Epub(article_package=article_package, blog_title=self.url_info['blog_title'], uid=self.url_info['uid'])
+            self.url_info.clear()    # 这行不需要吧？
+            del article_package
+            book_count += 1
 
-                self.url_info['worker'].start()
-                chapter += 1
         print "main_start done!"
-        self.url_info['worker'].print_url_info()        # 输出url_info的内容
+
+        return
 
     def get_url_info(self, raw_url):
         u"""
@@ -72,7 +84,7 @@ class SinaBlog2ebook(object):
             return url_kind
 
         kind = detect_url(raw_url)
-        print "kind??" + kind
+        # print "kind??" + kind
         if kind == 'homepage':
 
             # 一般来说UID有两种方式

@@ -2,7 +2,7 @@
 
 # ######################################################
 # File Name   :    BaseClass.py   Done for now
-# Description :    存放一些常用的函数
+# Description :    基本类，实现了一些常用的函数
 # Author      :    Frank
 # Date        :    2014.03.04
 # ######################################################
@@ -129,3 +129,8 @@ class HttpBaseClass(object):
         else:
             page_content = rawPageData.read()
             return page_content
+
+
+if __name__ == "__main__":
+    testBaseClass = BaseClass()
+    testBaseClass.print_dict({"test1": "test1", "test2": "test2"}, "test2", "hello")

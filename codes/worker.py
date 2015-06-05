@@ -24,7 +24,7 @@ class PageWoker(BaseClass, HttpBaseClass):
 
     def get_article_package(self):
         """
-        article_package:  [(article_title, article_body, post_time), [...]]
+        article_package:  [[article_title, article_body, post_time], [...]]
         :return:
         """
         list_article_url = []
@@ -36,7 +36,7 @@ class PageWoker(BaseClass, HttpBaseClass):
             list_article_url = list_article_url + now_article_url
 
         list_article_url.remove('4cf7b4ec0100eudp')     # 移除意见反馈留言板的ID（博文的形式）
-        print "list_article_url" + str(list_article_url)
+        # print "list_article_url" + str(list_article_url)
         article_package = []       # 用来将所有的文章打包
         for now_article_id in list_article_url:
             # print now_article
@@ -44,7 +44,9 @@ class PageWoker(BaseClass, HttpBaseClass):
             article_url_response = self.getHttpContent(url=article_url)
             now_article_title, now_article_body, now_post_time =\
                 self.get_article_info(article_url_response=article_url_response, blog_title=self.url_info['blog_title'])
-            article_package.append((now_article_title, now_article_body, now_post_time))
+            # TODO 没用title是因为制作电子书不能有中文
+            article_package.append([now_article_id, now_article_body, now_post_time])
+        # print "article_package！！！！" + str(article_package[0][0])
         return article_package
 
     def get_blog_info(self, base_url=''):
@@ -84,13 +86,13 @@ class PageWoker(BaseClass, HttpBaseClass):
         # print "article title??:" + article_title
         article_body = \
             article_url_response[article_url_response.find("<!-- 正文开始 -->")+len("<!-- 正文开始 -->"):article_url_response.find("<!-- 正文结束 -->")]
-        print "article_body:" + article_body
+        # print "article_body:" + article_body
         match = re.search(r'(?<=<span class="time SG_txtc">\().*?(?=\)</span>)', article_url_response)     # 最后更新时间
         if match:
             post_time = match.group(0)
         else:
             post_time = "未知时间"
-        print "post_time:" + post_time
+        # print "post_time:" + post_time
 
         return article_title, article_body, post_time
 
