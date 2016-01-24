@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# ######################################################
-# File Name   :    worker.py
-# Description :    爬取网页的内容
-# Author      :    Frank
-# Date        :    2014.06.03
-# ######################################################
-
 import threading
 import re
 

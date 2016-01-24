@@ -28,7 +28,7 @@ class SinaBlog(object):
         """
         Path.init_base_path()       # 设置路径
         Path.init_work_directory()  # 创建路径
-        # self.init_database()      # TODO init_database()
+        # self.init_database()      # TODO 使用数据库???
         Config._load()
         return
 
@@ -46,7 +46,6 @@ class SinaBlog(object):
             Debug.logger.info(u"#Debug:# 现在是 Debug 模式")
         self.init_config()
 
-
         with open('./ReadList.txt', 'r') as read_list:
             counter = 1
             for line in read_list:
@@ -63,6 +62,7 @@ class SinaBlog(object):
         Debug.logger.info(u"对记录 {} 进行分析".format(command))
 
         task_package = ReadListParser.get_task(command)     # 分析命令
+        Debug.logger.debug("task_package" + str(task_package))
         worker_factory(task_package)
         Debug.logger.info(u"网页信息抓取完毕")
 

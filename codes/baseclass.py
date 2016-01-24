@@ -133,4 +133,4 @@ class HttpBaseClass(object):
 
 if __name__ == "__main__":
     testBaseClass = BaseClass()
-    testBaseClass.print_dict({"test1": "test1", "test2": "test2"}, "test2", "hello")
+    testBaseClass.print_dict({"test1": "test11", "test2": "test22"}, "test2", "hello")
