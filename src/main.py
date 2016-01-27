@@ -1,24 +1,19 @@
 # -*- coding: utf-8 -*-
 
-# ######################################################
-# File Name   :    main.py
-# Description :    程序的主要内容就在该类中的main方法
-# Author      :    Frank
-# Date        :    2014.06.03
-# ######################################################
-
+import sqlite3
 import urllib
 import time
 import re
 
 from codes.worker import *
 from codes.epubBuilder.epubBuilder import *
-from codes.baseclass import *
+# from codes.baseclass import *
 
 from src.tools.path import Path
 from src.tools.config import Config
 from src.tools.debug import Debug
 from src.read_list_parser import ReadListParser
+from src.tools.db import DB
 
 
 class SinaBlog(object):
@@ -28,7 +23,7 @@ class SinaBlog(object):
         """
         Path.init_base_path()       # 设置路径
         Path.init_work_directory()  # 创建路径
-        # self.init_database()      # TODO 使用数据库???
+        self.init_database()        # 创建数据库
         Config._load()
         return
 
@@ -63,7 +58,7 @@ class SinaBlog(object):
 
         task_package = ReadListParser.get_task(command)     # 分析命令
         Debug.logger.debug("task_package" + str(task_package))
-        worker_factory(task_package)
+        # worker_factory(task_package)
         Debug.logger.info(u"网页信息抓取完毕")
 
         # read_list = open('./ReadList.txt', 'r')   # 该文件中存放要爬取的博客首页
@@ -90,6 +85,17 @@ class SinaBlog(object):
         # print "main_start done!"
 
         return
+
+    @staticmethod
+    def init_database():
+        if Path.is_file(Path.db_path):
+            DB.set_conn(sqlite3.connect(Path.db_path))
+        else:
+            DB.set_conn(sqlite3.connect(Path.db_path))
+            # 没有数据库, 新建一个出来
+            with open(Path.sql_path) as sql_script:
+                DB.cursor.executescript(sql_script.read())
+            DB.commit()
 
     def get_url_info(self, raw_url):
         u"""

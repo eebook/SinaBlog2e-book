@@ -30,6 +30,7 @@ class BaseClass(object):
         else:
             print prefix + str(key) + ' => ' + str(data)
         return
+
     def print_current_dir(self):
         """
         输出当前目录

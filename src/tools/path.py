@@ -2,18 +2,20 @@
 import os
 import shutil
 
+from src.tools.debug import Debug
+
 
 class Path(object):
     u"""
     定义一些路径,以及关于路径操作的一些函数
-    """
+    # """
     try:
         base_path = unicode(os.path.abspath('.').decode('gbk'))  # 初始地址,不含分隔符
     except:
         base_path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
 
     config_path = base_path + u'/SinaBlog_config.json'
-    db_path = base_path + u'/SinaBlog_db_001.db'
+    db_path = base_path + u'/SinaBlog_db_002.sqlite'
     sql_path = base_path + u'/db/SinaBlog.sql'
 
     www_css = base_path + u'/www/css'
@@ -78,9 +80,10 @@ class Path(object):
         """
         shutil.rmtree(path, ignore_errors=True)
 
+    @staticmethod
     def copy(src, dst):
         if not os.path.exists(src):
-            # Debug.logger.info('{}不存在，自动跳过'.format(src))
+            Debug.logger.info('{}不存在，自动跳过'.format(src))
             return
         if os.path.isdir(src):
             shutil.copytree(src, dst)
@@ -103,16 +106,16 @@ class Path(object):
         except:
             base_path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
 
-        Path.config_path = Path.base_path + u'/SinaBlog_config.json'
-        Path.db_path = Path.base_path + u'/SinaBlog_db_001.db'
-        Path.sql_path = Path.base_path + u'/db/SinaBlog.sql'
+        Path.config_path = base_path + u'/SinaBlog_config.json'
+        Path.db_path = base_path + u'/SinaBlog_db_001.db'
+        Path.sql_path = base_path + u'/db/SinaBlog.sql'
 
-        Path.www_css = Path.base_path + u'/www/css'
-        Path.www_image = Path.base_path + u'/www/image'
+        Path.www_css = base_path + u'/www/css'
+        Path.www_image = base_path + u'/www/image'
 
-        Path.html_pool_path = Path.base_path + u'/book_temp_source/SinaBlog/html'
-        Path.image_pool_path = Path.base_path + u'/book_temp_source/SinaBlog/pic'
-        Path.result_path = Path.base_path + u'/books/SinaBlog'
+        Path.html_pool_path = base_path + u'/book_temp_source/SinaBlog/html'
+        Path.image_pool_path = base_path + u'/book_temp_source/SinaBlog/pic'
+        Path.result_path = base_path + u'/books/SinaBlog'
 
         return
 

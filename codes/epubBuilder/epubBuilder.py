@@ -7,7 +7,6 @@
 # Date        :    2014.06.04
 # ######################################################
 
-from codes.basic_tools import *
 from codes.epubBuilder.list2Html import *
 from codes.epubBuilder.epub import *
 
