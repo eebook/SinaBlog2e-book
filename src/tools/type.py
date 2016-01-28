@@ -6,10 +6,10 @@ class Type(object):
 
     SinaBlog_Info = 'SinaBlog_Info'             # 新浪博客的一些基本信息,如作者id
 
-    SinaBlog_article_type_list = ['SinaBlog_article', 'SinaBlog']
+    SinaBlog_article_type_list = ['SinaBlog']
 
     info_table = {
         SinaBlog_Info: SinaBlog_Info
     }
 
-    # type_list = ['SinaBlog_Info', 'SinaBlog_Article']
+    type_list = ['SinaBlog', 'SinaBlogAuthor']

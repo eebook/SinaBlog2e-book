@@ -13,10 +13,12 @@ class InitialBook(object):
         def __init__(self):
             self.info = ''
             self.article = ''
+            self.info_extra = ''
+            self.article_extra = ''      # 用来扩展的????
             return
 
         def get_article_sql(self):
-            return self.article + Config.sql_extend_answer_filter
+            return self.article_extra + Config.sql_extend_answer_filter
 
     class Epub(object):
         def __init__(self):
@@ -31,13 +33,14 @@ class InitialBook(object):
             return
 
     def __init__(self):
-        self.kind = ''
+        self.kind = 'lalalal'
         self.sql = InitialBook.Sql()
         self.epub = InitialBook.Epub()
         self.info = {}
         self.article_list = []
         self.page_list = []
         self.prefix = ''
+        self.author_id = 0
         return
 
     def catch_data(self):
@@ -76,7 +79,8 @@ class InitialBook(object):
         if self.kind == Type.SinaBlog:              # 该博客所有的博文
             self.epub.title = u'新浪博客_{}({})'.format(info['name'], info['creator_id'])
             self.epub.id = info['creator_id']
-        elif self.kind == Type.SinaBlog_article:    # 单篇博文
+            self.author_id = info['creator_id']     # TODO
+        elif self.kind == Type.SinaBlog_article:    # 单篇博文 TODO
             self.epub.title = u'新浪博客博文集锦({})'.format(info['title'])
             self.epub.id = info['id']       # TODO
 
@@ -109,15 +113,15 @@ class InitialBook(object):
         return
 
 
-class HtmlBookPackage(object):
-    def __init__(self):
-        self.book_list = []
-        self.image_list = []
-        self.image_container = ImageContainer()
-        return
-
-    def get_title(self):
-        title = ''.join([book.epub.title for book in self.book_list])
-        title = Match.fix_filename(title)    # 移除特殊字符
-        return title
+# class HtmlBookPackage(object):
+#     def __init__(self):
+#         self.book_list = []
+#         self.image_list = []
+#         self.image_container = ImageContainer()
+#         return
+#
+#     def get_title(self):
+#         title = ''.join([book.epub.title for book in self.book_list])
+#         title = Match.fix_filename(title)    # 移除特殊字符
+#         return title
 

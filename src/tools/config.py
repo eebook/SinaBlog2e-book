@@ -56,7 +56,7 @@ class Config(object):
         return
 
     @staticmethod
-    def _print_config(self):
+    def _print_config():
         for attr in Config.__dict__:
             print attr[:2]
 

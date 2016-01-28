@@ -2,7 +2,7 @@
 import os
 import shutil
 
-from src.tools.debug import Debug
+# from src.tools.debug import Debug
 
 
 class Path(object):

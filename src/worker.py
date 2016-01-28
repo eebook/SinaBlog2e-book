@@ -8,6 +8,7 @@ from src.tools.match import Match
 from src.tools.db import DB
 
 from src.lib.SinaBlog_parser.author import AuthorParser
+from src.lib.SinaBlog_parser.SinaBlogparser import SinaBlogParser
 
 # # -*- coding: utf-8 -*-
 #
@@ -124,8 +125,6 @@ class PageWorker(object):
         self.work_set = set()  # 待抓取网址池
         self.work_complete_set = set()  # 已完成网址池
         self.content_list = []  # 用于存放已抓取的内容
-        self.answer_list = []
-        self.question_list = []
 
         self.info_list = []
         self.extra_index_list = []
@@ -140,10 +139,9 @@ class PageWorker(object):
         return
 
     @staticmethod
-    def parse_article_num(content):
+    def parse_max_page(content):
         u"""
-        这里的content是博客目录的页面内容
-        :param content:
+        :param content: 博客目录的页面内容
         :return:
         """
         max_page = 1
@@ -158,9 +156,17 @@ class PageWorker(object):
         finally:
             return max_page
 
-    def create_save_config(self):
-        config = {'Answer': self.answer_list, 'Question': self.question_list, }
-        return config
+    @staticmethod
+    def parse_blog_link_from_article_list(content):
+        u"""
+        :param content: 某一页博客目录的内容
+        :return:
+        """
+
+    def create_save_config(self):    # TODO
+        # config = {'Answer': self.answer_list, 'Question': self.question_list, }
+        # return config
+        return
 
     def clear_index(self):
         u"""
@@ -168,14 +174,14 @@ class PageWorker(object):
         """
         return
 
-    def save(self):
+    def save(self):         # TODO
         self.clear_index()
         save_config = self.create_save_config()
-        for key in save_config:
-            for item in save_config[key]:
-                if item:
-                    DB.save(item, key)
-        DB.commit()
+        # for key in save_config:
+        #     for item in save_config[key]:
+        #         if item:
+        #             DB.save(item, key)
+        # DB.commit()
         return
 
     def start(self):
@@ -188,7 +194,7 @@ class PageWorker(object):
     def create_work_set(self, target_url):
         if target_url in self.task_complete_set:
             return
-        content = Http.get_content(target_url)
+        content = Http.get_content(target_url + '?nr=1&sort=created')
         if not content:
             return
         self.task_complete_set.add(target_url)
@@ -256,12 +262,68 @@ class PageWorker(object):
         Control.control_center(argv, self.info_url_set)
         return
 
+
 class SinaBlogAuthorWorker(PageWorker):
     def parse_content(self, content):
         parser = AuthorParser(content)    # TODO TODO
 
+    def catch_info(self, target_url):
+        u"""
+        将info的信息放入info_list中
+        :param target_url: 新浪博客首页地址,
+        :return:
+        """
+        if target_url in self.info_url_complete_set:
+            return
+        content = Http.get_content(target_url)
+        if not content:
+            return
+        self.info_url_complete_set.add(target_url)
+        parser = AuthorParser(content)
+        self.info_list.append(parser.get_extra_info())
+        return
 
 class SinaBlogWorker(PageWorker):
     u"""
     Sina博客的worker
     """
+    def parse_article_num_page_num(self, target_url):
+        u"""
+
+        :param target_url: 博客首页的url
+        :return:
+        """
+        # result = Match.SinaBlog(target_url)
+        # SinaBlog_author_id = result.group('SinaBlog_people_id')
+        # articlelist_url = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
+        content = Http.get_content(target_url)
+        Debug.logger.info("target_url是????:" + target_url)
+        if not content:
+            return
+        parser = SinaBlogParser(content)
+        print u"parser.get_SinaBlog_info_list:!!!!!!" + str(parser.get_SinaBlog_info_list())
+
+    def create_work_set(self, target_url):
+        print u"target_url是:" + str(target_url)
+        if target_url in self.task_complete_set:
+            return
+        content = Http.get_content(target_url)
+        if not content:
+            return
+        self.task_complete_set.add(target_url)
+        self.parse_article_num_page_num(target_url)    # TODO
+        max_page = 2
+        for page in range(max_page):
+            url = 'http://blog.sina.com.cn/s/articlelist_{}_0_{}.html'.format(1287694611, page+1)   # TODO
+            # self.work_set.add(url)
+        return
+
+
+
+def worker_factory(task):
+    type_list = {'SinaBlog': SinaBlogWorker, 'SinaBlogAuthor': SinaBlogAuthorWorker}
+    for key in task:
+        Debug.logger.debug(u"key:" + str(key))
+        worker = type_list[key](task[key])
+        worker.start()
+    return
