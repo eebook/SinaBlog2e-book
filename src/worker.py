@@ -9,122 +9,20 @@ from src.tools.db import DB
 
 from src.lib.SinaBlog_parser.author import AuthorParser
 from src.lib.SinaBlog_parser.SinaBlogparser import SinaBlogParser
-
-# # -*- coding: utf-8 -*-
-#
-# import threading
-# import re
-#
-# from codes.baseclass import *
-#
-#
-# class PageWoker(BaseClass, HttpBaseClass):
-#     def __init__(self, url_info={}):
-#         self.url_info = url_info
-#         # self.print_dict(url_info)
-#         # str_base_url_response = self.getHttpContent(url=url_info['base_url'])
-#         # print "返回的目录内容？？：" + str_articlelist_response
-#         # self.article_num = self.get_article_num(str_base_url_res=str_base_url_res)
-#         # self.get_uid(str_base_url_response=str_base_url_response)
-#
-#     def get_article_package(self):
-#         """
-#         article_package:  [[article_title, article_body, post_time], [...]]
-#         :return:
-#         """
-#         list_article_url = []
-#         for int_current_page in range(self.url_info['article_pages']):
-#             current_blog_page_url = "http://blog.sina.com.cn/s/articlelist_" + str(self.url_info['uid']) + "_0_" + str(int_current_page+1) + ".html"
-#             # print current_blog_page_url
-#             str_response = self.getHttpContent(url=current_blog_page_url)
-#             now_article_url = re.findall(r'blog.sina.com.cn/s/blog_(\w+)\.html', str_response)
-#             list_article_url = list_article_url + now_article_url
-#
-#         list_article_url.remove('4cf7b4ec0100eudp')     # 移除意见反馈留言板的ID（博文的形式）
-#         # print "list_article_url" + str(list_article_url)
-#         article_package = []       # 用来将所有的文章打包
-#         for now_article_id in list_article_url:
-#             # print now_article
-#             article_url = "http://blog.sina.com.cn/s/blog_" + now_article_id + ".html"
-#             article_url_response = self.getHttpContent(url=article_url)
-#             now_article_title, now_article_body, now_post_time =\
-#                 self.get_article_info(article_url_response=article_url_response, blog_title=self.url_info['blog_title'])
-#             # TODO 没用title是因为制作电子书不能有中文
-#             article_package.append([now_article_id, now_article_body, now_post_time])
-#         # print "article_package！！！！" + str(article_package[0][0])
-#         return article_package
-#
-#     def get_blog_info(self, base_url=''):
-#         u"""
-#         获得文章的数量，首页就有
-#         :param base_url:
-#         :return:
-#         """
-#         # print "article_num"
-#         base_url_response = self.getHttpContent(url=base_url)
-#         match = re.search(r'(?<=<em class="count SG_txtb">\()(\d{1,})', base_url_response)
-#
-#         if match:
-#             article_num = match.group(0)
-#             article_num = int(article_num)
-#         else:
-#             return 0     # 如果一篇博客都没有？？？TODO
-#
-#         match = re.search(r'(?<=<title>).*?(?=</title>)', base_url_response)
-#         if match:
-#             blog_title = match.group(0)
-#         else:
-#             blog_title = str(self.url_info['uid']) + "的博客"
-#         return article_num, blog_title
-#
-#     def get_article_info(self, article_url_response, blog_title):
-#         u"""
-#         解析每篇文章，返回文章标题，内容，最后修改时间
-#         :param article_url_response:
-#         :return: article_title, article_body, post_time
-#         """
-#         match = re.search(r'(?<=<title>).*?(?=</title>)', article_url_response)
-#         if match:
-#             article_title = match.group(0).replace("_" + blog_title, "").replace("_新浪博客", "")
-#         else:
-#             article_title = "未匹配的文章标题"
-#         # print "article title??:" + article_title
-#         article_body = \
-#             article_url_response[article_url_response.find("<!-- 正文开始 -->")+len("<!-- 正文开始 -->"):article_url_response.find("<!-- 正文结束 -->")]
-#         # print "article_body:" + article_body
-#         match = re.search(r'(?<=<span class="time SG_txtc">\().*?(?=\)</span>)', article_url_response)     # 最后更新时间
-#         if match:
-#             post_time = match.group(0)
-#         else:
-#             post_time = "未知时间"
-#         # print "post_time:" + post_time
-#
-#         return article_title, article_body, post_time
-#
-#     def get_uid(self, base_url):
-#         """
-#         获得用户的uid
-#         :param base_url:
-#         :return:
-#         """
-#         str_base_url_response = self.getHttpContent(url=base_url)
-#         match = re.search(r'(?<=articlelist_)\d{1,}', str_base_url_response)
-#         if match:
-#             article_num = match.group(0)
-#             return int(article_num)
-#         else:
-#             return 0
-
-
+from src.lib.SinaBlog_parser.tools.parser_tools import ParserTools
+from bs4 import BeautifulSoup
 
 
 class PageWorker(object):
     def __init__(self, task_list):
         self.task_set = set(task_list)
         self.task_complete_set = set()
-        self.work_set = set()  # 待抓取网址池
-        self.work_complete_set = set()  # 已完成网址池
-        self.content_list = []  # 用于存放已抓取的内容
+        self.work_set = set()            # 待抓取网址池
+        self.work_complete_set = set()   # 已完成网址池
+        self.content_list = []           # 用于存放已抓取的内容
+
+        self.answer_list = []                # 存放文章的列表, 如果是SinaBlog的话, 对应的表是SinaBlog_Article
+        self.question_list = []         # 博客信息的list, 如果是SinaBlog的话, 对应的表是SinaBlog_Info
 
         self.info_list = []
         self.extra_index_list = []
@@ -164,9 +62,8 @@ class PageWorker(object):
         """
 
     def create_save_config(self):    # TODO
-        # config = {'Answer': self.answer_list, 'Question': self.question_list, }
-        # return config
-        return
+        config = {'Answer': self.answer_list, 'Question': self.question_list, }
+        return config
 
     def clear_index(self):
         u"""
@@ -177,18 +74,19 @@ class PageWorker(object):
     def save(self):         # TODO
         self.clear_index()
         save_config = self.create_save_config()
-        # for key in save_config:
-        #     for item in save_config[key]:
-        #         if item:
-        #             DB.save(item, key)
-        # DB.commit()
+        for key in save_config:
+            for item in save_config[key]:
+                if item:
+                    DB.save(item, key)
+        DB.commit()
         return
 
     def start(self):
         self.start_catch_info()
         self.start_create_work_list()
         self.start_worker()
-        # self.save()  TODO
+        print "answer_list!!!!!!!:" + str(self.answer_list)
+        self.save()  # bug??
         return
 
     def create_work_set(self, target_url):
@@ -264,58 +162,115 @@ class PageWorker(object):
 
 
 class SinaBlogAuthorWorker(PageWorker):
-    def parse_content(self, content):
-        parser = AuthorParser(content)    # TODO TODO
+    pass
 
-    def catch_info(self, target_url):
-        u"""
-        将info的信息放入info_list中
-        :param target_url: 新浪博客首页地址,
-        :return:
-        """
-        if target_url in self.info_url_complete_set:
-            return
-        content = Http.get_content(target_url)
-        if not content:
-            return
-        self.info_url_complete_set.add(target_url)
-        parser = AuthorParser(content)
-        self.info_list.append(parser.get_extra_info())
-        return
+#     def parse_content(self, content):
+#         parser = AuthorParser(content)    # TODO TODO
+#
+#     def catch_info(self, target_url):
+#         u"""
+#         将info的信息放入info_list中
+#         :param target_url: 新浪博客首页地址,
+#         :return:
+#         """
+#         if target_url in self.info_url_complete_set:
+#             return
+#         content = Http.get_content(target_url)
+#         if not content:
+#             return
+#         self.info_url_complete_set.add(target_url)
+#         parser = AuthorParser(content)
+#         self.info_list.append(parser.get_extra_info())
+#         return
 
 class SinaBlogWorker(PageWorker):
     u"""
     Sina博客的worker
     """
-    def parse_article_num_page_num(self, target_url):
+    def create_save_config(self):    # TODO
+        config = {'SinaBlog_Article': self.answer_list, 'SinaBlog_Info': self.question_list, }
+        return config
+
+    def parse_content(self, content):
+        parser = SinaBlogParser(content)
+        self.answer_list += [parser.article_parser.get_info()]
+
+    @staticmethod
+    def parse_article_num(content):
         u"""
+
+        :param target_url: 博客目录的content
+        :return: 博文总数量
+        """
+        soup = BeautifulSoup(content, "lxml")
+        article_num = soup.select('div.SG_connHead span em')
+        article_num = article_num[0].get_text()
+        article_num = article_num[1:-1]    # 去掉前后两个括号
+        return article_num
+
+    @staticmethod
+    def parse_get_article_list(article_list_content):
+        u"""
+        获得每一篇博客的链接组成的列表
+        :param article_list_content: 博文目录页面的内容
+        :return:
+        """
+        soup = BeautifulSoup(article_list_content, "lxml")
+        article_href_list = []
+
+        article_list = soup.select('span.atc_title a')
+        for item in range(len(article_list)):
+            article_title = ParserTools.get_attr(article_list[item], 'href')
+            article_href_list.append(article_title)
+
+        return article_href_list
+
+    def create_work_set(self, target_url):
+        u"""
+        根据博客首页的url, 首先通过re获得博客id, 然后根据博客"关于我"的页面的内容获得写入SinaBlog_Info
+        的数据(这部分理应不再这个函数中, 可以改进), 最后通过
 
         :param target_url: 博客首页的url
         :return:
         """
-        # result = Match.SinaBlog(target_url)
-        # SinaBlog_author_id = result.group('SinaBlog_people_id')
-        # articlelist_url = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
-        content = Http.get_content(target_url)
-        Debug.logger.info("target_url是????:" + target_url)
-        if not content:
-            return
-        parser = SinaBlogParser(content)
-        print u"parser.get_SinaBlog_info_list:!!!!!!" + str(parser.get_SinaBlog_info_list())
-
-    def create_work_set(self, target_url):
         print u"target_url是:" + str(target_url)
         if target_url in self.task_complete_set:
             return
-        content = Http.get_content(target_url)
-        if not content:
-            return
+        result = Match.SinaBlog(target_url)
+        SinaBlog_author_id = result.group('SinaBlog_people_id')
+        Debug.logger.debug(u"SinaBlog_people_id:" + str(SinaBlog_author_id))
+
+        href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
+        href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
+        href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
+
+        # ############下面这部分应该是SinaBlogAuthorWorker的内容,暂时写在这
+        content_profile = Http.get_content(href_profile)
+
+        parser = SinaBlogParser(content_profile)
+        self.question_list += parser.get_SinaBlog_info_list()
+        # #############上面几行代码完成SinaBlog_Info需要的内容
+        Debug.logger.debug(u"测试: question_list???" + str(self.question_list))
+
+        # content_index = Http.get_content(href_index)
+        content_article_list = Http.get_content(href_article_list)
+
+        article_num = int(self.parse_article_num(content_article_list))
+        Debug.logger.debug(u"article_num:" + str(article_num))
+        page_num = article_num/50 + 1
+
+        # if not content:
+        #     return
         self.task_complete_set.add(target_url)
-        self.parse_article_num_page_num(target_url)    # TODO
-        max_page = 2
-        for page in range(max_page):
-            url = 'http://blog.sina.com.cn/s/articlelist_{}_0_{}.html'.format(1287694611, page+1)   # TODO
-            # self.work_set.add(url)
+
+        for page in range(1):
+            url = 'http://blog.sina.com.cn/s/articlelist_{}_0_{}.html'.format(1287694611, page+1)
+            content_article_list = Http.get_content(url)
+            article_list = self.parse_get_article_list(content_article_list)
+            for item in article_list:
+                # print "item??:" + str(item)
+                self.work_set.add(item)
+        # self.work_set.add("http://blog.sina.com.cn/s/blog_4cc0a91301000967.html")
         return
 
 
@@ -324,6 +279,7 @@ def worker_factory(task):
     type_list = {'SinaBlog': SinaBlogWorker, 'SinaBlogAuthor': SinaBlogAuthorWorker}
     for key in task:
         Debug.logger.debug(u"key:" + str(key))
+        Debug.logger.debug(u"task[key]:" + str(task[key]))
         worker = type_list[key](task[key])
         worker.start()
     return

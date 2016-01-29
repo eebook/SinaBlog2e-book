@@ -32,7 +32,8 @@ class DB(object):
                                                                               columns=','.join(data.keys()),
                                                                               items=(',?' * len(data.keys()))[1:])
         Debug.logger.debug(sql)
-        # DB.cursor.execute(sql, tuple(data.values()))
+        DB.cursor.execute(sql, tuple(data.values()))
+        Debug.logger.info("tuple?????" + str(tuple(data.values())))
         return
 
     @staticmethod

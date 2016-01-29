@@ -54,8 +54,20 @@ class Match(object):
         """
         return re.search(r'(?<=blog\.sina\.com\.cn/u/)(?P<SinaBlog_people_id>[^/\n\r]*)', content)
 
+    @staticmethod
+    def SinaBlog_profile(content=''):
+        u"""
 
+        :param content: Sina博客"博客目录"的网址, 如:
+            http://blog.sina.com.cn/s/articlelist_1287694611_0_1.html
+        :return:
+        """
+        return re.search(r'(?<=blog\.sina\.com\.cn/s/articlelist_)(?P<SinaBlog_people_id>[^/\n\r]*)(_0_1\.)', content)
 
 # result = Match.SinaBlog('http://blog.sina.com.cn/u/1287694611')
 # SinaBlog_id = result.group('SinaBlog_people_id')
 # print SinaBlog_id
+
+result = Match.SinaBlog_profile('http://blog.sina.com.cn/s/articlelist_1287694611_0_1.html')
+SinaBlog_id = result.group('SinaBlog_people_id')
+print SinaBlog_id
