@@ -11,7 +11,7 @@ href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(S
 href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
 href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
 
-article_href = 'http://blog.sina.com.cn/s/blog_4cc0a91301000967.html'
+article_href = 'http://blog.sina.com.cn/s/blog_a51f23b30102wby0.html'
 
 html = urllib2.urlopen(article_href)
 content = html.read()
@@ -47,7 +47,19 @@ def get_tag_content(tag):
     return "".join([unicode(x) for x in tag.contents])
 
 article_body = soup.find('div', class_='artical', id='articlebody')
+if not article_body:
+    print (u"博文内容没有找到")
+article_body = str(article_body)
 print article_body
+
+# article_body = soup.find('div', class_='artical', id='articlebody')
+# article_body = article_body.find('div', id='sina_keyword_ad_area2')
+# article_body = soup.select('div.articalContent')[0]
+# print article_body
+# author_name = soup.select('div.info_nm span strong')
+# if not author_name:
+#     print u"没有找到"
+# print author_name
 
 # title = soup.select('div.articalTitle h2')
 # article_title = title[0].get_text()
