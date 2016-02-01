@@ -5,8 +5,6 @@ import urllib
 import time
 import re
 
-from codes.worker import *
-from codes.epubBuilder.epubBuilder import *
 # from codes.baseclass import *
 
 from src.tools.path import Path
@@ -14,6 +12,7 @@ from src.tools.config import Config
 from src.tools.debug import Debug
 from src.read_list_parser import ReadListParser
 from src.tools.db import DB
+from src.book import Book
 from src.worker import worker_factory
 from src.tools.type import Type
 
@@ -59,17 +58,28 @@ class SinaBlog(object):
         Debug.logger.info(u"对记录 {} 进行分析".format(command))
 
         task_package = ReadListParser.get_task(command)     # 分析命令
-        Debug.logger.debug(u"task_package:" + str(task_package))
-        Debug.logger.debug(u"task_package.work_list:" + str(task_package.work_list))
-        Debug.logger.debug(u"task_package.book_list.kind:" + str((task_package.book_list[Type.SinaBlog][0]).kind))
-        Debug.logger.debug(u"task_package.book_list.author_id:" + str((task_package.book_list[Type.SinaBlog][0]).author_id))
-        Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))
-        Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))
-        Debug.logger.debug(u"task_package.book_list.epub.article_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.article_count))
-        Debug.logger.debug(u"task_package.book_list.epub.char_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.char_count))
-        Debug.logger.debug(u"task_package.book_list.epub.title:" + str((task_package.book_list[Type.SinaBlog][0]).epub.title))
-        worker_factory(task_package.work_list)
-        Debug.logger.info(u"网页信息抓取完毕")
+        # Debug.logger.debug(u"task_package的book_list的长度为:" + str(len(task_package.book_list)))
+        # Debug.logger.debug(u"task_package:" + str(task_package))
+        # Debug.logger.debug(u"task_package.work_list:" + str(task_package.work_list))
+        # Debug.logger.debug(u"task_package.book_list.kind:" + str((task_package.book_list[Type.SinaBlog][0]).kind))
+        # Debug.logger.debug(u"task_package.book_list.author_id:" + str((task_package.book_list[Type.SinaBlog][0]).author_id))
+        # Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))
+        # Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))
+        # Debug.logger.debug(u"task_package.book_list.epub.article_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.article_count))
+        # Debug.logger.debug(u"task_package.book_list.epub.char_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.char_count))
+        # Debug.logger.debug(u"task_package.book_list.epub.title:" + str((task_package.book_list[Type.SinaBlog][0]).epub.title))
+
+        if not task_package.is_work_list_empty():
+            # worker_factory(task_package.work_list)
+            Debug.logger.info(u"网页信息抓取完毕")
+
+        if not task_package.is_book_list_empty():
+            Debug.logger.info(u"开始从数据库中生成电子书")
+            Debug.logger.info(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))  #.sql.info))
+            Debug.logger.info(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))  #.sql.info))
+            book = Book(task_package.book_list)
+            # Debug.logger.info(u"什么情况?")
+            book.create()
 
         # read_list = open('./ReadList.txt', 'r')   # 该文件中存放要爬取的博客首页
         # book_count = 1               # 生成的书的数量

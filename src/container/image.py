@@ -39,7 +39,7 @@ class ImageContainer(object):
         return ''
 
     def get_filename_list(self):
-        return self.container.valuse()
+        return self.container.values()
 
     def download(self, index):
         image = self.container[index]
@@ -48,7 +48,7 @@ class ImageContainer(object):
 
         if os.path.isfile(self.save_path + '/' + filename):
             return
-        Debug.print_in_single_line(u'开始下载图片{}'.format(href))
+        Debug.logger.debug(u'开始下载图片{}'.format(href))
         content = Http.get_content(url=href, timeout=Config.timeout_download_picture)
         if not content:
             return

@@ -127,7 +127,7 @@ class PageWorker(object):
         self.work_complete_set.add(target_url)
         return
 
-    def parse_content(self, content):
+    def parse_content(self, content):     # SinaBlogWorker重载了
         # parser = QuestionParser(content)  TODO
         # self.question_list += parser.get_question_info_list()
         # self.answer_list += parser.get_answer_list()

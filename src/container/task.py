@@ -51,6 +51,7 @@ class TaskPackage(object):
         info_extra = [item.sql.info_extra for item in book_list]
         article_extra = [item.sql.article_extra for item in book_list]
         book.kind = book_type
+        book.author_id = book_list[0].author_id       # 这里的len(book_list)比1大怎么办?
         book.sql.info = 'select * from SinaBlog_Info where ({})'.format(' or '.join(info_extra))
         book.sql.article = 'select * from SinaBlog_Article where ({})'.format(' or '.join(article_extra))
         self.book_list[book_type] = [book]

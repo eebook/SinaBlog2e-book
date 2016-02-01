@@ -42,6 +42,9 @@ class ReadListParser():
             if raw_task:
                 raw_task_list.append(raw_task)
 
+        Debug.logger.debug(u"raw_task_list的长度为:" + str(len(raw_task_list)))
+        for item in range(len(raw_task_list)):
+            Debug.logger.debug(u"raw_task_list是" + str(raw_task_list[item].book.author_id))
         task_package = ReadListParser.merge_task_list(raw_task_list)
 
         return task_package
@@ -91,6 +94,8 @@ class ReadListParser():
             task.book.kind = 'SinaBlog'
             task.book.sql.info_extra = 'creator_id = "{}"'.format(SinaBlog_author_id)
             task.book.sql.article_extra = 'author_id = "{}"'.format(SinaBlog_author_id)
+            task.book.author_id = SinaBlog_author_id
+            Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
         parse = {'SinaBlog': parse_SinaBlog}
         kind = detect(raw_command)
@@ -100,6 +105,7 @@ class ReadListParser():
     def merge_task_list(task_list):
         task_package = TaskPackage()
         for item in task_list:
+            Debug.logger.debug(u"merge_task_list中的item是什么???" + str(item))
             task_package.add_task(item)
         return task_package.get_task()
 

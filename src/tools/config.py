@@ -20,8 +20,7 @@ class Config(object):
 
     max_thread = 10         # 最大线程数
     picture_quality = 1     # 图片质量（0/1/2，无图/标清/原图）
-    max_question = 100      # 每本电子书中最多可以放多少个问题
-    max_answer = 600        # 每本电子书中最多可以放多少个回答
+    max_blog = 10          # 每本电子书中最多可以放多少个博客
     max_article = 600       # 每本电子书中最多可以放多少篇文章
 
     max_try = 5             # 最大尝试次数

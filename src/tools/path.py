@@ -83,7 +83,7 @@ class Path(object):
     @staticmethod
     def copy(src, dst):
         if not os.path.exists(src):
-            Debug.logger.info('{}不存在，自动跳过'.format(src))
+            # Debug.logger.info('{}不存在，自动跳过'.format(src))
             return
         if os.path.isdir(src):
             shutil.copytree(src, dst)
@@ -124,11 +124,13 @@ class Path(object):
         Path.reset_path()
         Path.mkdir(u'./book_temp_source')
         Path.mkdir(u'./books')
-        Path.chdir(u'./book_temp_source')
+        Path.chdir(u'./books')
+        Path.mkdir(u'./SinaBlog')
+        Path.chdir(u'../book_temp_source')
         Path.mkdir(u'./SinaBlog')
         Path.chdir(u'./SinaBlog')
         Path.mkdir(u'./html')
-        Path.mkdir(u'./pictures')
+        Path.mkdir(u'./pic')
         Path.reset_path()
         return
 

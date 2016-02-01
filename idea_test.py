@@ -46,9 +46,12 @@ def get_tag_content(tag):
     """
     return "".join([unicode(x) for x in tag.contents])
 
-title = soup.select('div.articalTitle h2')
-article_title = title[0].get_text()
-print article_title
+article_body = soup.find('div', class_='artical', id='articlebody')
+print article_body
+
+# title = soup.select('div.articalTitle h2')
+# article_title = title[0].get_text()
+# print article_title
 
 # id = soup.select('div.artical h2')
 # article_id = get_attr(id[0], 'id')
