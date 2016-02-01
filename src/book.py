@@ -34,7 +34,7 @@ class Book(object):
 
         book_list = self.volume_book(raw_book_list)
         # Debug.logger.debug("book_list是??" + str(book_list))
-        print u"执行前, book_list为:" + str(book_list)
+        # print u"执行前, book_list为:" + str(book_list)
         self.book_list = [self.create_book_package(book) for book in book_list]
         print (u"执行后, book_list为:" + str(book_list))
         return

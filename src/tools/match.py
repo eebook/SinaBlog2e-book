@@ -68,6 +68,6 @@ class Match(object):
 # SinaBlog_id = result.group('SinaBlog_people_id')
 # print SinaBlog_id
 
-result = Match.SinaBlog_profile('http://blog.sina.com.cn/s/articlelist_1287694611_0_1.html')
-SinaBlog_id = result.group('SinaBlog_people_id')
-print SinaBlog_id
+# result = Match.SinaBlog_profile('http://blog.sina.com.cn/s/articlelist_1287694611_0_1.html')
+# SinaBlog_id = result.group('SinaBlog_people_id')
+# print SinaBlog_id

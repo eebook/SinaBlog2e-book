@@ -69,10 +69,10 @@ class ReadListParser():
             *   answer
         """
         def detect(command):
-            for command_type in Type.type_list:
-                result = getattr(Match, command_type)(command)    # 现在只能是SinaBlog类型
-                if result:
-                    return command_type
+            command_type = Type.SinaBlog
+            result = getattr(Match, command_type)(command)    # 现在只能是SinaBlog类型
+            if result:
+                return command_type
             return 'unknown'
 
         def parse_SinaBlog(command):

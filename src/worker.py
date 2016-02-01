@@ -30,7 +30,6 @@ class PageWorker(object):
         self.info_url_complete_set = set()
 
         self.add_property()  # 添加扩展属性
-        # Http.set_cookie()
 
     def add_property(self):
 
@@ -164,24 +163,6 @@ class PageWorker(object):
 class SinaBlogAuthorWorker(PageWorker):
     pass
 
-#     def parse_content(self, content):
-#         parser = AuthorParser(content)    # TODO TODO
-#
-#     def catch_info(self, target_url):
-#         u"""
-#         将info的信息放入info_list中
-#         :param target_url: 新浪博客首页地址,
-#         :return:
-#         """
-#         if target_url in self.info_url_complete_set:
-#             return
-#         content = Http.get_content(target_url)
-#         if not content:
-#             return
-#         self.info_url_complete_set.add(target_url)
-#         parser = AuthorParser(content)
-#         self.info_list.append(parser.get_extra_info())
-#         return
 
 class SinaBlogWorker(PageWorker):
     u"""
@@ -193,7 +174,7 @@ class SinaBlogWorker(PageWorker):
 
     def parse_content(self, content):
         parser = SinaBlogParser(content)
-        self.answer_list += [parser.article_parser.get_info()]
+        self.answer_list += parser.get_answer_list()
 
     @staticmethod
     def parse_article_num(content):
@@ -237,18 +218,20 @@ class SinaBlogWorker(PageWorker):
         if target_url in self.task_complete_set:
             return
         result = Match.SinaBlog(target_url)
-        SinaBlog_author_id = result.group('SinaBlog_people_id')
+        SinaBlog_author_id = int(result.group('SinaBlog_people_id'))
         Debug.logger.debug(u"SinaBlog_people_id:" + str(SinaBlog_author_id))
 
         href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
         href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
         href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
 
-        # ############下面这部分应该是SinaBlogAuthorWorker的内容,暂时写在这
+        # ############下面这部分应该是SinaBlogAuthorWorker的内容, 暂时写在这, 以后再优化
         content_profile = Http.get_content(href_profile)
 
         parser = SinaBlogParser(content_profile)
         self.question_list += parser.get_SinaBlog_info_list()
+        Debug.logger.debug(u"create_work_set中的question_list是什么??" + str(self.question_list))
+
         # #############上面几行代码完成SinaBlog_Info需要的内容
         Debug.logger.debug(u"测试: question_list???" + str(self.question_list))
 
@@ -257,20 +240,18 @@ class SinaBlogWorker(PageWorker):
 
         article_num = int(self.parse_article_num(content_article_list))
         Debug.logger.debug(u"article_num:" + str(article_num))
-        page_num = article_num/50 + 1
+        page_num = article_num/50 + 1      # 博客目录页面, 1页放50个博客链接
 
-        # if not content:
-        #     return
+        self.question_list[0]['article_num'] = article_num      # 这样的话, 每行只能放一个新浪博客地址!!!
+
         self.task_complete_set.add(target_url)
 
-        for page in range(1):
-            url = 'http://blog.sina.com.cn/s/articlelist_{}_0_{}.html'.format(1287694611, page+1)
+        for page in range(page_num):
+            url = 'http://blog.sina.com.cn/s/articlelist_{}_0_{}.html'.format(SinaBlog_author_id, page+1)
             content_article_list = Http.get_content(url)
             article_list = self.parse_get_article_list(content_article_list)
             for item in article_list:
-                # print "item??:" + str(item)
                 self.work_set.add(item)
-        # self.work_set.add("http://blog.sina.com.cn/s/blog_4cc0a91301000967.html")
         return
 
 
@@ -278,8 +259,8 @@ class SinaBlogWorker(PageWorker):
 def worker_factory(task):
     type_list = {'SinaBlog': SinaBlogWorker, 'SinaBlogAuthor': SinaBlogAuthorWorker}
     for key in task:
-        Debug.logger.debug(u"key:" + str(key))
-        Debug.logger.debug(u"task[key]:" + str(task[key]))
+        Debug.logger.debug(u"在worker_factory中, key:" + str(key))
+        Debug.logger.debug(u"在worker_factory中, task[key]:" + str(task[key]))
         worker = type_list[key](task[key])
         worker.start()
     return

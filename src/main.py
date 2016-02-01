@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
-import urllib
-import time
-import re
-
-# from codes.baseclass import *
 
 from src.tools.path import Path
 from src.tools.config import Config
@@ -70,40 +65,15 @@ class SinaBlog(object):
         # Debug.logger.debug(u"task_package.book_list.epub.title:" + str((task_package.book_list[Type.SinaBlog][0]).epub.title))
 
         if not task_package.is_work_list_empty():
-            # worker_factory(task_package.work_list)
+            worker_factory(task_package.work_list)
             Debug.logger.info(u"网页信息抓取完毕")
 
         if not task_package.is_book_list_empty():
             Debug.logger.info(u"开始从数据库中生成电子书")
-            Debug.logger.info(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))  #.sql.info))
-            Debug.logger.info(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))  #.sql.info))
+            Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))  #.sql.info))
+            Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))  #.sql.info))
             book = Book(task_package.book_list)
-            # Debug.logger.info(u"什么情况?")
             book.create()
-
-        # read_list = open('./ReadList.txt', 'r')   # 该文件中存放要爬取的博客首页
-        # book_count = 1               # 生成的书的数量
-        # for line in read_list:       # 一行表示一本电子书
-        #     chapter = 1              # 可以把多个博客放在一本书中，用$符号分隔链接即可 TODO
-        #     article_package = []
-        #     raw_url = line
-        #     # for raw_url in line.split('$'):
-        #     # print "debug:rawUrl" + raw_url
-        #     print u'正在制作第{}本电子书的第{}节'.format(book_count, chapter)
-        #     self.url_info = self.get_url_info(raw_url)
-        #     # self.url_info['worker'].start()
-        #     chapter += 1
-        #     # print "now_article_package" + str(self.url_info['worker'].get_article_package)
-        #     article_package = self.url_info['worker'].get_article_package()
-        #     self.url_info['worker'].print_url_info()        # 输出url_info的内容
-        #     # print "article_package是什么" + str(article_package)
-        #     SinaBlog2Epub(article_package=article_package, blog_title=self.url_info['blog_title'], uid=self.url_info['uid'])
-        #     self.url_info.clear()    # 这行不需要吧？
-        #     del article_package
-        #     book_count += 1
-        #
-        # print "main_start done!"
-
         return
 
     @staticmethod

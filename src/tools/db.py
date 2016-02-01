@@ -65,9 +65,9 @@ class DB(object):
                 'creator_id', 'creator_hash', 'creator_name', 'creator_sign',
                 'creator_logo', 'description', 'article_num', 'follower'
             ),
-            Type.SinaBlog_Article: (
-                'author_id', 'author_hash', 'author_name', 'author_sign',
-                'article_id', 'href', 'title', 'content', 'comment', 'publish_date'
+            Type.SinaBlog_Article: (                # 这里把article_id 和author_id对换一下,不然会出错???TODO
+                'article_id', 'author_hash', 'author_name', 'author_sign',
+                'author_id', 'href', 'title', 'content', 'comment', 'publish_date'
             )
         }
         return {k: v for (k, v) in zip(template[kind], result)}

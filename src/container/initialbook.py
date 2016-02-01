@@ -102,11 +102,12 @@ class InitialBook(object):
 
 
         # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_list:" + str(SinaBlog_list))
-        # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_article_list:" + str(SinaBlog_article_list))
+        Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_article_list[0]:" + str(SinaBlog_article_list[0]))
 
         def merge_article_into_SinaBlog():
             SinaBlog_dict = {item['creator_id']: {'SinaBlog': item.copy(), 'SinaBlog_article_list': [], }
                              for item in SinaBlog_list}
+
             for SinaBlog_article in SinaBlog_article_list:
                 SinaBlog_dict[SinaBlog_article['author_id']]['SinaBlog_article_list'].append(SinaBlog_article)
             return SinaBlog_dict.values()
