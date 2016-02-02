@@ -4,8 +4,9 @@
 将新浪博客的所有文章爬取下来，制作成Epub格式的电子书（同时生成html格式文件）  
 </br>
 例如，爬取[韩寒的新浪博客](http://blog.sina.com.cn/u/1191258123)的所有文章：  
-![hanhanepub](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanepub.png?imageView/2/w/619/q/90)  
-网页版：
+![hanhanepub](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanepub.png?imageView/2/w/800/q/90)    
+网页版：   
+
 ![hanhanhtml](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanhtml.png?imageView/2/w/619/q/90)
 
 ## 开发环境
@@ -28,10 +29,11 @@ $ python SinaBlog2e-book.py
 
 ## 依赖
  * [Beautiful Soup 4](http://www.crummy.com/software/BeautifulSoup/)(已经放在项目目录中，不需要下载)
- * [lxml](http://lxml.de/)    
- 	```shell
-	$ pip install lxml
-	```  
+ * [lxml](http://lxml.de/)     
+  
+ ```shell
+$ pip install lxml
+```  
 
 ## 项目说明
 **该项目只是[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)的新浪博客版本，目前大量用到[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)项目的代码，再次表示感谢。也请大家多多支持该项目作者[姚泽源](https://github.com/YaoZeyuan)同学。**
