@@ -20,8 +20,16 @@ class Match(object):
     def fix_html(content=''):
         content = content.replace('</br>', '').replace('</img>', '')
         content = content.replace('<br>', '<br/>')
-        content = content.replace('href="//link.zhihu.com', 'href="https://link.zhihu.com')  # 修复跳转链接
-        for item in re.findall(r'\<noscript\>.*?\</noscript\>', content, re.S):
+        content = content.replace('<wbr>', '')
+        for item in re.findall(r'\<span class="img2"\>.*?\</span\>', content):
+            content = content.replace(item, '')
+        for item in re.findall(r'\<script\>.*?\</script\>', content, re.S):
+            content = content.replace(item, '')
+        for item in re.findall(r'height=\".*?\" ', content):     # 因为新浪博客的图片的高,宽是js控制的,不加
+            content = content.replace(item, '')                 # 这一段会导致无法匹配
+        for item in re.findall(r'width=\".*?\" ', content):
+            content = content.replace(item, '')
+        for item in re.findall(r'\<cite\>.*?\</cite\>', content):
             content = content.replace(item, '')
         return content
 

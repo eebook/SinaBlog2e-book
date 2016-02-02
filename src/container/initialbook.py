@@ -22,7 +22,6 @@ class InitialBook(object):
 
     class Epub(object):
         def __init__(self):
-            Debug.logger.debug(u"这里是Epub(object)中的__init__")
             self.article_count = 0
             self.char_count = 0
 
@@ -93,7 +92,7 @@ class InitialBook(object):
     def get_SinaBlog_list(self):
         if self.kind in Type.SinaBlog:      # TODO 目前只有一种情况
             article_list = self.__get_SinaBlog_list()
-        self.set_article_list(article_list)
+        self.set_article_list(article_list)     # 原因如上
         return
 
     def __get_SinaBlog_list(self):
@@ -102,7 +101,7 @@ class InitialBook(object):
 
 
         # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_list:" + str(SinaBlog_list))
-        Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_article_list[0]:" + str(SinaBlog_article_list[0]))
+        # Debug.logger.info(u"在__get_SinaBlog_list中, SinaBlog_article_list[0]:" + str(SinaBlog_article_list[0]))
 
         def merge_article_into_SinaBlog():
             SinaBlog_dict = {item['creator_id']: {'SinaBlog': item.copy(), 'SinaBlog_article_list': [], }
@@ -114,7 +113,7 @@ class InitialBook(object):
 
         def add_property(SinaBlog):
             char_count = 0
-            # comment_count
+            # TODO comment_count
             for SinaBlog_article in SinaBlog['SinaBlog_article_list']:
                 SinaBlog_article['char_count'] = len(SinaBlog_article['content'])
                 SinaBlog_article['update_date'] = SinaBlog_article['publish_date']

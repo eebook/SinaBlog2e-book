@@ -84,7 +84,7 @@ class PageWorker(object):
         self.start_catch_info()
         self.start_create_work_list()
         self.start_worker()
-        print "answer_list!!!!!!!:" + str(self.answer_list)
+        # print "answer_list!!!!!!!:" + str(self.answer_list)
         self.save()  # bug??
         return
 
@@ -127,9 +127,6 @@ class PageWorker(object):
         return
 
     def parse_content(self, content):     # SinaBlogWorker重载了
-        # parser = QuestionParser(content)  TODO
-        # self.question_list += parser.get_question_info_list()
-        # self.answer_list += parser.get_answer_list()
         return
 
     def start_worker(self):
@@ -209,7 +206,7 @@ class SinaBlogWorker(PageWorker):
     def create_work_set(self, target_url):
         u"""
         根据博客首页的url, 首先通过re获得博客id, 然后根据博客"关于我"的页面的内容获得写入SinaBlog_Info
-        的数据(这部分理应不再这个函数中, 可以改进), 最后通过
+        的数据(这部分理应不在这个函数中, 可以改进), 最后通过
 
         :param target_url: 博客首页的url
         :return:
@@ -219,10 +216,9 @@ class SinaBlogWorker(PageWorker):
             return
         result = Match.SinaBlog(target_url)
         SinaBlog_author_id = int(result.group('SinaBlog_people_id'))
-        Debug.logger.debug(u"SinaBlog_people_id:" + str(SinaBlog_author_id))
+        # Debug.logger.debug(u"SinaBlog_people_id:" + str(SinaBlog_author_id))
 
         href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
-        href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
         href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
 
         # ############下面这部分应该是SinaBlogAuthorWorker的内容, 暂时写在这, 以后再优化
@@ -230,10 +226,10 @@ class SinaBlogWorker(PageWorker):
 
         parser = SinaBlogParser(content_profile)
         self.question_list += parser.get_SinaBlog_info_list()
-        Debug.logger.debug(u"create_work_set中的question_list是什么??" + str(self.question_list))
+        # Debug.logger.debug(u"create_work_set中的question_list是什么??" + str(self.question_list))
 
         # #############上面几行代码完成SinaBlog_Info需要的内容
-        Debug.logger.debug(u"测试: question_list???" + str(self.question_list))
+        # Debug.logger.debug(u"测试: question_list???" + str(self.question_list))
 
         # content_index = Http.get_content(href_index)
         content_article_list = Http.get_content(href_article_list)
@@ -252,15 +248,15 @@ class SinaBlogWorker(PageWorker):
             article_list = self.parse_get_article_list(content_article_list)
             for item in article_list:
                 self.work_set.add(item)
+            # self.work_set.add(article_list[0])
         return
-
 
 
 def worker_factory(task):
     type_list = {'SinaBlog': SinaBlogWorker, 'SinaBlogAuthor': SinaBlogAuthorWorker}
     for key in task:
-        Debug.logger.debug(u"在worker_factory中, key:" + str(key))
-        Debug.logger.debug(u"在worker_factory中, task[key]:" + str(task[key]))
+        # Debug.logger.debug(u"在worker_factory中, key:" + str(key))
+        # Debug.logger.debug(u"在worker_factory中, task[key]:" + str(task[key]))
         worker = type_list[key](task[key])
         worker.start()
     return

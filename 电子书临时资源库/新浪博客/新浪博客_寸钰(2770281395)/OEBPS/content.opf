@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="duokan-book-id" version="2.0">
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:title>新浪博客_寸钰(2770281395)</dc:title><dc:creator>SinaBlog2e-bookv1</dc:creator><dc:identifier id="create_by_yaozeyuan">urn:uuid:create-by-yao-ze-yuan-Tsingtao</dc:identifier>
+
+    </metadata>
+    <manifest>
+        <item href="toc.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+        <item id="1" href="html/index.xhtml" media-type="application/xhtml+xml"/>
+<item id="2" href="style/markdown.css" media-type="text/css"/>
+<item id="3" href="style/customer.css" media-type="text/css"/>
+<item id="4" href="style/normalize.css" media-type="text/css"/>
+<item id="5" href="style/article.css" media-type="text/css"/>
+<item id="6" href="html/0_info.xhtml" media-type="application/xhtml+xml"/>
+<item id="7" href="html/0_2770281395.xhtml" media-type="application/xhtml+xml"/>
+<item id="8" href="image/8367df4ef564d9cb227529c01bc665cc.jpg" media-type="image/jpeg"/>
+<item id="9" href="image/c8c5691514f5754bae06de3bef1afd2f.jpg" media-type="image/jpeg"/>
+<item id="10" href="image/01a2829dfebf6f64d962c4236ab619e7.jpg" media-type="image/jpeg"/>
+<item id="11" href="image/331f25c8618f4bfec398c158015f78d7.jpg" media-type="image/jpeg"/>
+<item id="12" href="image/58c1069040f9df05841c1d45f2ac4b0b.jpg" media-type="image/jpeg"/>
+<item id="13" href="image/8fcf12da33c8b4799cdff9871cccfd50.jpg" media-type="image/jpeg"/>
+<item id="14" href="image/a299a53eeb1ce1a8639f3409ac679f5c.jpg" media-type="image/jpeg"/>
+<item id="15" href="image/aa51d2cb2ae391b9317f7828c419f67a.jpg" media-type="image/jpeg"/>
+<item id="16" href="image/9cd9f572681d743d4ab6398c9c389478.jpg" media-type="image/jpeg"/>
+<item id="17" href="image/66fd3ea76bcd81b6f7e531d53e5e7dba.jpg" media-type="image/jpeg"/>
+<item id="18" href="image/454eae22c3fd610901c199f1bbee5022.jpg" media-type="image/jpeg"/>
+<item id="19" href="image/71bc6fd0ed283c42c49c0cb7b832b7df.jpg" media-type="image/jpeg"/>
+<item id="20" href="image/d23e59ac5ce6280719caeea311464cd6.jpg" media-type="image/jpeg"/>
+<item id="21" href="image/e8c6ed1077b1c7b3cc1a01099a392d55.jpg" media-type="image/jpeg"/>
+<item id="22" href="image/741975b38c12d004598bef4849371363.jpg" media-type="image/jpeg"/>
+<item id="23" href="image/a4c26d1e5885305701be709a3d33442f.jpg" media-type="image/jpeg"/>
+<item id="24" href="image/577b96ede6566df22bd31a0ae6825943.jpg" media-type="image/jpeg"/>
+<item id="25" href="image/c8ed264c1ffce0251a361fac723e9290.jpg" media-type="image/jpeg"/>
+<item id="26" href="image/15f790d27d9d98053f9ff084ee1699f8.jpg" media-type="image/jpeg"/>
+<item id="27" href="image/2fce05f868d181de32029d57b7f73cec.jpg" media-type="image/jpeg"/>
+<item id="28" href="image/139dd3478769f8e4c06daf2388afb8fc.jpg" media-type="image/jpeg"/>
+<item id="29" href="image/66c4ee240e8caa0d8c016b97c0aee61e.jpg" media-type="image/jpeg"/>
+<item id="30" href="image/bcc4f03ae963789aac7a6aacc30ec475.jpg" media-type="image/jpeg"/>
+<item id="31" href="image/909cce64c1b946e541f64e210b291335.jpg" media-type="image/jpeg"/>
+<item id="32" href="image/f2c85904163d63043456d1f70a06e91d.jpg" media-type="image/jpeg"/>
+<item id="33" href="image/0cfa4eeba0e725037019981b9b406601.jpg" media-type="image/jpeg"/>
+<item id="34" href="image/7e9c355eb39b8d500c0b84418023741d.jpg" media-type="image/jpeg"/>
+<item id="35" href="image/54a8b963229ef72aaa8579616c482438.jpg" media-type="image/jpeg"/>
+<item id="36" href="image/266120330f5390dc9cb37e2e7f98abab.jpg" media-type="image/jpeg"/>
+<item id="37" href="image/5d17b28371ac40398a81dc063a95405a.jpg" media-type="image/jpeg"/>
+
+    </manifest>
+    <spine toc="ncx">
+        <itemref idref="1"/><itemref idref="6" linear="no"/><itemref idref="7"/>
+    </spine>
+    <guide>
+        <reference href="html/0_info.xhtml" title="title_page" type="title-page"/>
+    </guide>
+</package>

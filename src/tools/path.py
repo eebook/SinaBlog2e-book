@@ -21,9 +21,9 @@ class Path(object):
     www_css = base_path + u'/www/css'
     www_image = base_path + u'/www/image'
 
-    html_pool_path = base_path + u'/book_temp_source/SinaBlog/html'
-    image_pool_path = base_path + u'/book_temp_source/SinaBlog/pic'
-    result_path = base_path + u'/books/SinaBlog'
+    html_pool_path = base_path + u'/电子书临时资源库/新浪博客/网页池'
+    image_pool_path = base_path + u'/电子书临时资源库/新浪博客/图片池'
+    result_path = base_path + u'/生成的电子书/新浪博客'
 
     @staticmethod
     def mkdir(path):
@@ -113,24 +113,23 @@ class Path(object):
         Path.www_css = base_path + u'/www/css'
         Path.www_image = base_path + u'/www/image'
 
-        Path.html_pool_path = base_path + u'/book_temp_source/SinaBlog/html'
-        Path.image_pool_path = base_path + u'/book_temp_source/SinaBlog/pic'
-        Path.result_path = base_path + u'/books/SinaBlog'
-
+        Path.html_pool_path = base_path + u'/电子书临时资源库/新浪博客/网页池'
+        Path.image_pool_path = base_path + u'/电子书临时资源库/新浪博客/图片池'
+        Path.result_path = base_path + u'/生成的电子书/新浪博客'
         return
 
     @staticmethod
     def init_work_directory():
         Path.reset_path()
-        Path.mkdir(u'./book_temp_source')
-        Path.mkdir(u'./books')
-        Path.chdir(u'./books')
-        Path.mkdir(u'./SinaBlog')
-        Path.chdir(u'../book_temp_source')
-        Path.mkdir(u'./SinaBlog')
-        Path.chdir(u'./SinaBlog')
-        Path.mkdir(u'./html')
-        Path.mkdir(u'./pic')
+        Path.mkdir(u'./电子书临时资源库')
+        Path.mkdir(u'./生成的电子书')
+        Path.chdir(u'./生成的电子书')
+        Path.mkdir(u'./新浪博客')
+        Path.chdir(u'../电子书临时资源库')
+        Path.mkdir(u'./新浪博客')
+        Path.chdir(u'./新浪博客')
+        Path.mkdir(u'./网页池')
+        Path.mkdir(u'./图片池')
         Path.reset_path()
         return
 

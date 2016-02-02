@@ -10,7 +10,7 @@
     "timeout_download_html": 5, 
     "max_thread": 10, 
     "timeout_download_picture": 10, 
-    "debug": true, 
+    "debug": false, 
     "max_article": 600, 
     "password": "Zhihu2Ebook", 
     "remember_account": false

@@ -31,7 +31,7 @@ class DB(object):
         sql = "replace into {table_name} ({columns}) values ({items})".format(table_name=table_name,
                                                                               columns=','.join(data.keys()),
                                                                               items=(',?' * len(data.keys()))[1:])
-        Debug.logger.debug(sql)
+        # Debug.logger.debug(sql)
         DB.cursor.execute(sql, tuple(data.values()))
         # Debug.logger.info("tuple?????" + str(tuple(data.values())))
         return

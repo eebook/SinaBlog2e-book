@@ -46,11 +46,39 @@ def get_tag_content(tag):
     """
     return "".join([unicode(x) for x in tag.contents])
 
+def SinaBlog(content=''):
+    u"""
+
+    :param content: Sina博客网址, 如:http://blog.sina.com.cn/u/1287694611
+    :return:  re.match object
+    """
+    return re.search(r'(?<=blog\.sina\.com\.cn/u/)(?P<SinaBlog_people_id>[^/\n\r]*)', content)
+
+def SinaBlog_article_content(content=''):
+    return re.search(r'(?<=<!-- 正文开始 -->)<?P<real_content>(<!-- 正文结束 -->)', content)
+
+
+
+
 article_body = soup.find('div', class_='artical', id='articlebody')
 if not article_body:
     print (u"博文内容没有找到")
 article_body = str(article_body)
-print article_body
+
+lindex = article_body.find('<div class="articalTitle"')
+rindex = article_body.find('<!-- 正文结束 -->')
+# print rindex
+result = article_body[lindex:rindex]
+print result
+
+# # result_re = SinaBlog_article_content(article_body)
+# # result = result_re.group('real_content')
+#
+# print result
+
+
+
+# print article_body
 
 # article_body = soup.find('div', class_='artical', id='articlebody')
 # article_body = article_body.find('div', id='sina_keyword_ad_area2')

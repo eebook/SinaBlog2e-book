@@ -8,7 +8,7 @@ from src.tools.debug import Debug
 class SinaBlogArticle(ParserTools):
     def __init__(self, dom=None):
         if dom:
-            Debug.logger.debug(u"SinaBlogArticle中,YESSSSSSSSSSSSSSSSSS")
+            # Debug.logger.debug(u"SinaBlogArticle中,YESSSSSSSSSSSSSSSSSS")
             pass
         self.set_dom(dom)
         self.info = {}
@@ -38,11 +38,9 @@ class SinaBlogArticle(ParserTools):
         self.parse_article_title()
         self.parse_answer_content()     # 获得博文的内容
         # self.parse_href()
-        # self.parse_comment()
-        # self.parse_publish_data()
+        # self.parse_comment()          # TODO
+        # self.parse_publish_data()     # TODO
         return self.info
-
-
 
     def parse_answer_content(self):
         u"""
@@ -50,13 +48,21 @@ class SinaBlogArticle(ParserTools):
         :return:
         """
         article_body = self.dom.find('div', class_='artical', id='articlebody')
-        # article_body = article_body.find('div', id='sina_keyword_ad_area2')
+        # article_body = self.dom.find('div', class_='articalContent')
+        # article_body = self.dom.find('div', id='sina_keyword_ad_area2')
         # article_body = self.dom.select('#sina_keyword_ad_area2')[0]
         # article_body = self.dom.select('div.articalContent')
         if not article_body:
             Debug.logger.debug(u"博文内容没有找到")
             return
-        self.info['content'] = str(article_body)
+        article_body = str(article_body)
+        # lindex = article_body.find('<div class="articalTitle"')     # TODO: 改成正则表达式可能更好一点
+        rindex = article_body.find('<!-- 正文结束 -->')
+        article_body = article_body[:rindex]
+        # print u"获得的body为:" + str(article_body)
+
+        # print u"获得的body为:" + str(article_body[:rindex])
+        self.info['content'] = article_body[:rindex]
 
     def parse_author_id(self):   # TODO 这个部分可以不重复的
         u"""
