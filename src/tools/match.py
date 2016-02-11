@@ -4,7 +4,7 @@ import re
 
 class Match(object):
     @staticmethod
-    def xsrf(content=''):
+    def xsrf(content=''):           # TODO: 暂时没用
         xsrf = re.search(r'(?<=name="_xsrf" value=")[^"]*(?="/>)', content)
         if xsrf:
             return '_xsrf=' + xsrf.group(0)
@@ -71,11 +71,3 @@ class Match(object):
         :return:
         """
         return re.search(r'(?<=blog\.sina\.com\.cn/s/articlelist_)(?P<SinaBlog_people_id>[^/\n\r]*)(_0_1\.)', content)
-
-# result = Match.SinaBlog('http://blog.sina.com.cn/u/1287694611')
-# SinaBlog_id = result.group('SinaBlog_people_id')
-# print SinaBlog_id
-
-# result = Match.SinaBlog_profile('http://blog.sina.com.cn/s/articlelist_1287694611_0_1.html')
-# SinaBlog_id = result.group('SinaBlog_people_id')
-# print SinaBlog_id
