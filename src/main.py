@@ -24,7 +24,7 @@ class SinaBlog(object):
         return
 
     @staticmethod
-    def init_config():       # TODO
+    def init_config():       # TODO 输出提示语之类的
         Config._save()
         return
 
@@ -33,8 +33,7 @@ class SinaBlog(object):
         程序运行的主函数
         :return:
         """
-        if Config.debug is True:
-            Debug.logger.info(u"#Debug:# 现在是 Debug 模式")
+        Debug.logger.debug(u"#Debug:# 现在是 Debug 模式")
         self.init_config()
 
         with open('./ReadList.txt', 'r') as read_list:
@@ -87,58 +86,7 @@ class SinaBlog(object):
                 DB.cursor.executescript(sql_script.read())
             DB.commit()
 
-    # def get_url_info(self, raw_url):
-    #     u"""
-    #     返回标准格式的网址查询所需要的内容
-    #     urlInfo 结构
-    #     *   kind
-    #     *   guide
-    #         *   用于输出引导语，告知用户当前工作的状态
-    #     *   worker
-    #         *   用于生成抓取对象，负责抓取网页内容
-    #     *   filter
-    #         *   用于生成过滤器，提取答案，并将答案组织成便于生成电子书的结构
-    #     *   urlInfo
-    #         *   用于为Author获取信息
-    #     *   baseSetting       TODO
-    #         *   基础的设置信息，比如图片质量，过滤标准
-    #         *   picQuality
-    #             *   图片质量
-    #         *   maxThread
-    #             *   最大线程数
-    #     """
-    #
-    #     def detect_url(url):
-    #         url_kind = 'homepage'
-    #         self.url_info['base_url'] = url
-    #         return url_kind
-    #
-    #     kind = detect_url(raw_url)
-    #     # print "kind??" + kind
-    #     if kind == 'homepage':
-    #
-    #         # 一般来说UID有两种方式
-    #         matchs1 = re.search(r'(?<=blog\.sina\.com\.cn/u/)(\d+)', self.url_info['base_url'])
-    #         matchs2 = re.search(r'(?<=blog\.sina\.com\.cn/)(\w+)', self.url_info['base_url'])
-    #         if matchs1 or matchs2:
-    #             self.url_info['worker'] = PageWoker(url_info=self.url_info)
-    #             self.url_info['uid'] = self.url_info['worker'].get_uid(base_url=self.url_info['base_url'])
-    #         else:
-    #             print "ReadList.txt中给出的链接错误，程序终止"
-    #             exit(0)
-    #         self.url_info['guide'] = u'成功匹配到博客地址{}，开始执行抓取任务'.format(self.url_info['base_url'])
-    #         self.url_info['article_list_url'] = \
-    #             "http://blog.sina.com.cn/s/articlelist_" + str(self.url_info['uid']) + "_0_1.html"
-    #
-    #     else:
-    #         print "【debug】get_url_info, kind, Wrong!!!"
-    #         print "ReadList.txt中给出的链接错误，程序终止"
-    #
-    #     self.url_info['article_num'], self.url_info['blog_title'] = \
-    #         self.url_info['worker'].get_blog_info(self.url_info['base_url'])
-    #
-    #     self.url_info['article_pages'] = int(self.url_info['article_num']/50) + 1
-    #     return self.url_info
+
 
 
 
