@@ -3,7 +3,7 @@
 ## 简介
 将新浪博客的所有文章爬取下来，制作成Epub格式的电子书（同时生成html格式文件）  
 </br>
-例如，爬取[韩寒的新浪博客](http://blog.sina.com.cn/u/1191258123)的所有文章：  
+例如，爬取[韩寒的新浪博客](http://blog.sina.com.cn/u/1191258123)的所有文章：   
 ![hanhanepub](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanepub.png?imageView/2/w/800/q/90)    
 网页版：   
 
@@ -39,7 +39,7 @@ $ pip install lxml
 **该项目只是[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)的新浪博客版本，目前大量用到[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)项目的代码，再次表示感谢。也请大家多多支持该项目作者[姚泽源](https://github.com/YaoZeyuan)同学。**
 
 ## TODO list  
-本着「过早优化是万恶之源」的原则（好吧，就是代码写得烂），目前这个项目还算能用，但是问题也比较多，写个TODO list 
+本着「过早优化是万恶之源」的原则（好吧，就是代码写得烂），目前这个项目还算能用，但是问题也比较多，写个TODO list: 
 
 0. 支持多种形式的新浪博客地址 
 1. 效率问题，程序还需要优化（爬韩寒博客，一共316篇博文，用了36分钟）  

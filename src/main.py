@@ -19,7 +19,7 @@ class SinaBlog(object):
         """
         Path.init_base_path()       # 设置路径
         Path.init_work_directory()  # 创建路径
-        self.init_database()        # 创建数据库
+        self.init_database()        # 初始化数据库
         Config._load()
         return
 

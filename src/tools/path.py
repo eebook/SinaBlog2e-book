@@ -7,7 +7,7 @@ import shutil
 
 class Path(object):
     u"""
-    定义一些路径,以及关于路径操作的一些函数
+    定义资源,生成的文件等的路径,以及关于路径操作的一些函数
     # """
     try:
         base_path = unicode(os.path.abspath('.').decode('gbk'))  # 初始地址,不含分隔符

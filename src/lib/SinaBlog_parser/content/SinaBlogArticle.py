@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from src.lib.SinaBlog_parser.tools.parser_tools import ParserTools
-from bs4 import BeautifulSoup
 from src.tools.match import Match
 from src.tools.debug import Debug
 

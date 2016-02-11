@@ -91,5 +91,3 @@ class Http(object):
             return ''
         return content
 
-testHttp = Http()
-testHttp.get_content(url='http://www.baidu.com')

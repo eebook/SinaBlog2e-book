@@ -9,6 +9,26 @@ from src.tools.debug import Debug
 
 
 class InitialBook(object):
+    u"""
+        ->kind
+        ->author_id
+        ->sql ->class sql
+                ->info
+                ->article
+                ->info_extra
+                ->article_extra
+        ->epub ->class Epub
+                    ->article_count
+                    ->char_count
+                    ->title
+                    ->id
+                    ->split_index
+                    ->prefix
+        ->info
+        ->article_list
+        ->page_list
+        ->prefix
+    """
     class Sql(object):
         def __init__(self):
             self.info = ''

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 class Type(object):
     SinaBlog_Article = 'SinaBlog_Article'       # 类型是单篇的文章
     SinaBlog = 'SinaBlog'                       # 类型是文章的集锦

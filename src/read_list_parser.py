@@ -5,16 +5,17 @@ from src.tools.type import Type
 from src.tools.match import Match
 from src.container.task import SingleTask, TaskPackage
 
+
 class ReadListParser():
     u"""
-    TODO
+    通过分析指令, 获得TaskPackage对象, 其中,有work_list={}和book_list{}
     """
 
     @staticmethod
     def get_task(command):
         u"""
         对外的接口, 用来分析指令,
-        :param command:
+        :param command:   网页的首地址
         :return:
         """
         def remove_comment(command):
@@ -70,7 +71,7 @@ class ReadListParser():
         """
         def detect(command):
             command_type = Type.SinaBlog
-            result = getattr(Match, command_type)(command)    # 现在只能是SinaBlog类型
+            result = getattr(Match, command_type)(command)    # 目前只有SinaBlog类型
             if result:
                 return command_type
             return 'unknown'
@@ -78,7 +79,7 @@ class ReadListParser():
         def parse_SinaBlog(command):
             u"""
 
-            :param command: 博客首页地址
+            :param command: 某个新浪博客博主的首页地址
             :return: task:
             """
             result = Match.SinaBlog(command)
@@ -95,7 +96,7 @@ class ReadListParser():
             task.book.sql.info_extra = 'creator_id = "{}"'.format(SinaBlog_author_id)
             task.book.sql.article_extra = 'author_id = "{}"'.format(SinaBlog_author_id)
             task.book.author_id = SinaBlog_author_id
-            Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
+            # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
         parse = {'SinaBlog': parse_SinaBlog}
         kind = detect(raw_command)

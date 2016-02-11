@@ -25,7 +25,7 @@ class SinaBloeAuthorInfo(ParserTools):
         return self.info
 
     def parse_info(self):
-        self.parse_base_info()        # 基本信息: 用户id, name, logo, 描述, 文章数量
+        self.parse_base_info()        # 基本信息: 用户id, name, logo, description, article_num
         # self.parse_detail_info()      # 详细信息, 博客等级, 积分, 访问, 关注人气
         return self.info
 
@@ -70,7 +70,7 @@ class SinaBloeAuthorInfo(ParserTools):
 
     def parse_creator_name(self):
         u"""
-        关于我页面上, ownernick的内容
+        "关于我"页面上, ownernick的内容
         :return:
         """
         creator_name = self.dom.select('div.info_nm span strong')       # 获得creator_name

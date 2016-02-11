@@ -35,7 +35,6 @@ class TaskPackage(object):
         self.work_list[single_task.kind].append(single_task.spider.href_index)
 
         if single_task.kind not in self.book_list:
-            print u"在add_task, single_task.kind是" + str(single_task.kind)
             self.book_list[single_task.kind] = []
         self.book_list[single_task.kind].append(single_task.book)
         return

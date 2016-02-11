@@ -20,8 +20,3 @@ class SinaBlogParser(BaseParser):
         author_parser.set_dom(self.dom)
         return [author_parser.get_info()]
 
-
-    # def get_SinaBlogArticle(self):
-    #     article_parser = SinaBlogArticle()
-    #     article_parser.set_dom(self.dom)
-    #     return [article_parser.get_info()]

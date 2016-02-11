@@ -7,7 +7,6 @@ from src.tools.http import Http
 from src.tools.match import Match
 from src.tools.db import DB
 
-from src.lib.SinaBlog_parser.author import AuthorParser
 from src.lib.SinaBlog_parser.SinaBlogparser import SinaBlogParser
 from src.lib.SinaBlog_parser.tools.parser_tools import ParserTools
 from bs4 import BeautifulSoup
@@ -206,39 +205,41 @@ class SinaBlogWorker(PageWorker):
     def create_work_set(self, target_url):
         u"""
         根据博客首页的url, 首先通过re获得博客id, 然后根据博客"关于我"的页面的内容获得写入SinaBlog_Info
-        的数据(这部分理应不在这个函数中, 可以改进), 最后通过
+        的数据(这部分理应不在这个函数中, 可以改进), 最后通过博客目录页面的内容, 获得每篇博文的地址,
+        放入work_set中
 
         :param target_url: 博客首页的url
         :return:
         """
-        print u"target_url是:" + str(target_url)
+        Debug.logger.debug(u"target_url是:" + str(target_url))
         if target_url in self.task_complete_set:
             return
         result = Match.SinaBlog(target_url)
         SinaBlog_author_id = int(result.group('SinaBlog_people_id'))
-        # Debug.logger.debug(u"SinaBlog_people_id:" + str(SinaBlog_author_id))
 
         href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
         href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
 
-        # ############下面这部分应该是SinaBlogAuthorWorker的内容, 暂时写在这, 以后再优化
+        # ############下面这部分应该是SinaBlogAuthorWorker的内容, 写到SinaBlog_Info, 暂时写在这, 以后再优化
         content_profile = Http.get_content(href_profile)
 
         parser = SinaBlogParser(content_profile)
         self.question_list += parser.get_SinaBlog_info_list()
         # Debug.logger.debug(u"create_work_set中的question_list是什么??" + str(self.question_list))
-
-        # #############上面几行代码完成SinaBlog_Info需要的内容
-        # Debug.logger.debug(u"测试: question_list???" + str(self.question_list))
+        # #############上面这部分应该是SinaBlogAuthorWorker的内容, 写到SinaBlog_Info, 暂时写在这, 以后再优化
 
         # content_index = Http.get_content(href_index)
         content_article_list = Http.get_content(href_article_list)
 
         article_num = int(self.parse_article_num(content_article_list))
         Debug.logger.debug(u"article_num:" + str(article_num))
-        page_num = article_num/50 + 1      # 博客目录页面, 1页放50个博客链接
+        if article_num % 50 != 0:
+            page_num = article_num/50 + 1      # 博客目录页面, 1页放50个博客链接
+        else:
+            page_num = article_num / 50
 
-        self.question_list[0]['article_num'] = article_num      # 这样的话, 每行只能放一个新浪博客地址!!!
+        self.question_list[0]['article_num'] = article_num  # 这样的话, 每行只能放一个新浪博客地址!!!
+        # 上面这行, 暂时只能这样写, 因为"关于我"的页面, 没有文章的数量
 
         self.task_complete_set.add(target_url)
 
