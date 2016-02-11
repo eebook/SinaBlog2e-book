@@ -1,10 +1,10 @@
-# SinaBlog2e-book
+# jianshu2e-book
 
 ## 简介
-将新浪博客的所有文章爬取下来，制作成Epub格式的电子书（同时生成html格式文件）  
+爬取[简书](http://www.jianshu.com)上的文章，制作成Epub格式的电子书（同时生成html格式文件）  
 </br>
-例如，爬取[韩寒的新浪博客](http://blog.sina.com.cn/u/1191258123)的所有文章：   
-![hanhanepub](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanepub.png?imageView/2/w/800/q/90)    
+例如，将[王垠](http://www.jianshu.com/users/b1dd2b2c87a8/latest_articles)在简书上的所有文章爬取下来制作电子书：
+
 网页版：   
 
 ![hanhanhtml](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanhtml.png?imageView/2/w/619/q/90)
