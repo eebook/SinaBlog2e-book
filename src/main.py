@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-
 import sqlite3
 
+
 from src.tools.path import Path
+
+from src.book import Book
 from src.tools.config import Config
 from src.tools.debug import Debug
-from src.read_list_parser import ReadListParser
 from src.tools.db import DB
-from src.book import Book
+from src.read_list_parser import ReadListParser
 from src.worker import worker_factory
 from src.tools.type import Type
 
@@ -33,9 +34,9 @@ class SinaBlog(object):
         程序运行的主函数
         :return:
         """
-        Debug.logger.debug(u"#Debug:# 现在是 Debug 模式")
+        Debug.logger.info(u"#Debug模式#: 不检查更新")
         self.init_config()
-
+        Debug.logger.info(u"开始读取ReadList.txt的内容")
         with open('./ReadList.txt', 'r') as read_list:
             counter = 1
             for line in read_list:
@@ -52,19 +53,9 @@ class SinaBlog(object):
         Debug.logger.info(u"对记录 {} 进行分析".format(command))
 
         task_package = ReadListParser.get_task(command)     # 分析命令
-        # Debug.logger.debug(u"task_package的book_list的长度为:" + str(len(task_package.book_list)))
-        # Debug.logger.debug(u"task_package:" + str(task_package))
-        # Debug.logger.debug(u"task_package.work_list:" + str(task_package.work_list))
-        # Debug.logger.debug(u"task_package.book_list.kind:" + str((task_package.book_list[Type.SinaBlog][0]).kind))
-        # Debug.logger.debug(u"task_package.book_list.author_id:" + str((task_package.book_list[Type.SinaBlog][0]).author_id))
-        # Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))
-        # Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))
-        # Debug.logger.debug(u"task_package.book_list.epub.article_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.article_count))
-        # Debug.logger.debug(u"task_package.book_list.epub.char_count:" + str((task_package.book_list[Type.SinaBlog][0]).epub.char_count))
-        # Debug.logger.debug(u"task_package.book_list.epub.title:" + str((task_package.book_list[Type.SinaBlog][0]).epub.title))
 
         if not task_package.is_work_list_empty():
-            worker_factory(task_package.work_list)
+            worker_factory(task_package.work_list)  # 执行抓取程序
             Debug.logger.info(u"网页信息抓取完毕")
 
         if not task_package.is_book_list_empty():

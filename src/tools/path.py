@@ -21,8 +21,8 @@ class Path(object):
     www_css = base_path + u'/www/css'
     www_image = base_path + u'/www/image'
 
-    html_pool_path = base_path + u'/电子书临时资源库/新浪博客/网页池'
-    image_pool_path = base_path + u'/电子书临时资源库/新浪博客/图片池'
+    html_pool_path = base_path + u'/电子书临时资源库/网页池'
+    image_pool_path = base_path + u'/电子书临时资源库/图片池'
     result_path = base_path + u'/生成的电子书/新浪博客'
 
     @staticmethod
@@ -113,8 +113,8 @@ class Path(object):
         Path.www_css = base_path + u'/www/css'
         Path.www_image = base_path + u'/www/image'
 
-        Path.html_pool_path = base_path + u'/电子书临时资源库/新浪博客/网页池'
-        Path.image_pool_path = base_path + u'/电子书临时资源库/新浪博客/图片池'
+        Path.html_pool_path = base_path + u'/电子书临时资源库/网页池'
+        Path.image_pool_path = base_path + u'/电子书临时资源库/图片池'
         Path.result_path = base_path + u'/生成的电子书/新浪博客'
         return
 
@@ -126,8 +126,6 @@ class Path(object):
         Path.chdir(u'./生成的电子书')
         Path.mkdir(u'./新浪博客')
         Path.chdir(u'../电子书临时资源库')
-        Path.mkdir(u'./新浪博客')
-        Path.chdir(u'./新浪博客')
         Path.mkdir(u'./网页池')
         Path.mkdir(u'./图片池')
         Path.reset_path()

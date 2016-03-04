@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from src.tools.debug import Debug
-from src.tools.type import Type
-from src.tools.match import Match
 from src.container.task import SingleTask, TaskPackage
+from src.tools.debug import Debug
+from src.tools.match import Match
+from src.tools.type import Type
 
 
 class ReadListParser():
@@ -18,14 +17,6 @@ class ReadListParser():
         :param command:   网页的首地址
         :return:
         """
-        def remove_comment(command):
-            u"""
-            去掉#后面的注释
-            :param command:
-            :return:
-            """
-            return command.split('#')[0]
-
         def split_command(command):
             u"""
             # 一行是一本书, 每一行用$符号来区分章节
@@ -33,6 +24,14 @@ class ReadListParser():
             :return:
             """
             return command.split('$')
+
+        def remove_comment(command):
+            u"""
+            去掉#后面的注释
+            :param command:
+            :return:
+            """
+            return command.split('#')[0]
 
         command = remove_comment(command)
         command_list = split_command(command)
@@ -43,17 +42,13 @@ class ReadListParser():
             if raw_task:
                 raw_task_list.append(raw_task)
 
-        Debug.logger.debug(u"raw_task_list的长度为:" + str(len(raw_task_list)))
-        for item in range(len(raw_task_list)):
-            Debug.logger.debug(u"raw_task_list是" + str(raw_task_list[item].book.author_id))
         task_package = ReadListParser.merge_task_list(raw_task_list)
-
         return task_package
 
     @staticmethod
     def parse_command(raw_command=''):
         u"""
-
+        分析单条命令并返回待完成的task
         :param raw_command:   网址原始链接, 如:http://blog.sina.com.cn/u/1287694611
         :return: task
         task格式
@@ -70,10 +65,10 @@ class ReadListParser():
             *   answer
         """
         def detect(command):
-            command_type = Type.SinaBlog
-            result = getattr(Match, command_type)(command)    # 目前只有SinaBlog类型
-            if result:
-                return command_type
+            for command_type in Type.type_list:
+                result = getattr(Match, command_type)(command)    # 目前只有SinaBlog类型
+                if result:
+                    return command_type
             return 'unknown'
 
         def parse_SinaBlog(command):
@@ -98,9 +93,16 @@ class ReadListParser():
             task.book.author_id = SinaBlog_author_id
             # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
-        parse = {'SinaBlog': parse_SinaBlog}
+
+        def parse_error(command):
+            if command:
+                Debug.logger.info(u"""无法解析记录:{}所属网址类型,请检查后重试。""".format(command))
+            return
+
+        parser = {'SinaBlog': parse_SinaBlog,
+                  'unknown': parse_error,}
         kind = detect(raw_command)
-        return parse[kind](raw_command)
+        return parser[kind](raw_command)
 
     @staticmethod
     def merge_task_list(task_list):
@@ -109,6 +111,3 @@ class ReadListParser():
             Debug.logger.debug(u"merge_task_list中的item是什么???" + str(item))
             task_package.add_task(item)
         return task_package.get_task()
-
-
-
