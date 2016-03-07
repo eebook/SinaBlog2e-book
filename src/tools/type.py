@@ -12,5 +12,4 @@ class Type(object):
     info_table = {
         'SinaBlog_Info': SinaBlog_Info
     }
-
     type_list = ['SinaBlog', 'SinaBlogAuthor']

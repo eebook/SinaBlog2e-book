@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import logging.handlers
 import sys
 
 from src.tools.config import Config
@@ -54,6 +55,5 @@ class Debug(object):
 
     @staticmethod
     def print_config():
-        Config._sync()
-        Debug.print_dict(Config._config_store)
+        Debug.print_dict(Config.__dict__)
         return

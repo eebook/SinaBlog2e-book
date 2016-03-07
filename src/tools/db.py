@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from debug import Debug
 from src.tools.type import Type
 
@@ -55,7 +54,7 @@ class DB(object):
     @staticmethod
     def wrap(kind, result=()):
         u"""
-        将筛选出的列表按SQL名组装为字典对象
+        将s筛选出的列表按SQL名组装为字典对象
         :param kind:
         :param result:
         :return:

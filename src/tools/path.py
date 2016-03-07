@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 import os
+import sys
 import shutil
-
-# from src.tools.debug import Debug
 
 
 class Path(object):
     u"""
     定义资源,生成的文件等的路径,以及关于路径操作的一些函数
     # """
-    try:
-        base_path = unicode(os.path.abspath('.').decode('gbk'))  # 初始地址,不含分隔符
+    base_path = unicode(os.path.abspath('.').decode(sys.stdout.encoding))  # 初始地址,不含分隔符
     except:
         base_path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
 
     config_path = base_path + u'/SinaBlog_config.json'
-    db_path = base_path + u'/SinaBlog_db_002.sqlite'
+    db_path = base_path + u'/db/SinaBlog_db_002.sqlite'
     sql_path = base_path + u'/db/SinaBlog.sql'
 
     www_css = base_path + u'/www/css'
@@ -23,7 +21,32 @@ class Path(object):
 
     html_pool_path = base_path + u'/电子书临时资源库/网页池'
     image_pool_path = base_path + u'/电子书临时资源库/图片池'
-    result_path = base_path + u'/生成的电子书/新浪博客'
+    result_path = base_path + u'/生成的电子书'
+
+    @staticmethod
+    def reset_path():
+        Path.chdir(Path.base_path)
+        return
+
+    @staticmethod
+    def pwd():
+        u"""
+        输出绝对路径
+        :return:
+        """
+        print os.path.realpath('.')
+        return
+
+    @staticmethod
+    def get_pwd():
+        u"""
+        :return: 绝对路径
+        """
+        try:
+            path = unicode(os.path.abspath('.').decode('gbk'))  # 初始地址,不含分隔符
+        except:
+            path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
+        return path
 
     @staticmethod
     def mkdir(path):
@@ -48,37 +71,15 @@ class Path(object):
         return
 
     @staticmethod
-    def reset_path():
-        Path.chdir(Path.base_path)
-        return
-
-    @staticmethod
-    def pwd():
-        u"""
-        输出绝对路径
-        :return:
-        """
-        print os.path.realpath('.')
-
-    @staticmethod
-    def get_pwd():
-        u"""
-        :return: 绝对路径
-        """
-        try:
-            path = unicode(os.path.abspath('.').decode('gbk'))  # 初始地址,不含分隔符
-        except:
-            path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
-        return path
-
-    @staticmethod
     def rmdir(path):
         u"""
         删除整个目录,忽略错误
         :param path:
         :return:
         """
-        shutil.rmtree(path, ignore_errors=True)
+        if path:
+            shutil.rmtree(path, ignore_errors=True)
+        return
 
     @staticmethod
     def copy(src, dst):
@@ -106,16 +107,16 @@ class Path(object):
         except:
             base_path = os.path.abspath('.')  # 对于Mac和Linux用户，使用gbk解码反而会造成崩溃，故添加一个try-except，以防万一
 
-        Path.config_path = base_path + u'/SinaBlog_config.json'
-        Path.db_path = base_path + u'/SinaBlog_db_001.db'
-        Path.sql_path = base_path + u'/db/SinaBlog.sql'
-
         Path.www_css = base_path + u'/www/css'
         Path.www_image = base_path + u'/www/image'
 
+        Path.config_path = base_path + u'/SinaBlog_config.json'
+        Path.db_path = base_path + u'/db/SinaBlog_db_002.sqlite'
+        Path.sql_path = base_path + u'/db/SinaBlog.sql'
+
         Path.html_pool_path = base_path + u'/电子书临时资源库/网页池'
         Path.image_pool_path = base_path + u'/电子书临时资源库/图片池'
-        Path.result_path = base_path + u'/生成的电子书/新浪博客'
+        Path.result_path = base_path + u'/生成的电子书'
         return
 
     @staticmethod
@@ -123,9 +124,7 @@ class Path(object):
         Path.reset_path()
         Path.mkdir(u'./电子书临时资源库')
         Path.mkdir(u'./生成的电子书')
-        Path.chdir(u'./生成的电子书')
-        Path.mkdir(u'./新浪博客')
-        Path.chdir(u'../电子书临时资源库')
+        Path.chdir(u'./电子书临时资源库')
         Path.mkdir(u'./网页池')
         Path.mkdir(u'./图片池')
         Path.reset_path()
@@ -134,6 +133,3 @@ class Path(object):
     @staticmethod
     def is_file(path):
         return os.path.isfile(path)
-
-
-

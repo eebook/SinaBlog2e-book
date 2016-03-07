@@ -11,7 +11,7 @@ href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(S
 href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
 href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
 
-article_href = 'http://blog.sina.com.cn/s/blog_a51f23b30102wby0.html'
+article_href = 'http://blog.sina.com.cn/s/blog_5f34b1e601010fxd.html'
 
 html = urllib2.urlopen(article_href)
 content = html.read()
@@ -60,16 +60,18 @@ def SinaBlog_article_content(content=''):
 
 
 
-article_body = soup.find('div', class_='artical', id='articlebody')
+article_body = soup.find('div', class_='articalContent')
 if not article_body:
     print (u"博文内容没有找到")
 article_body = str(article_body)
 
-lindex = article_body.find('<div class="articalTitle"')
-rindex = article_body.find('<!-- 正文结束 -->')
+print article_body
+
+# lindex = article_body.find('<div class="articalTitle"')
+# rindex = article_body.find('<!-- 正文结束 -->')
 # print rindex
-result = article_body[lindex:rindex]
-print result
+# result = article_body[lindex:rindex]
+# print result + '</div>'    # 因为没有爬取评论的部分作为博客的内容,所以最后会少一个</div>
 
 # # result_re = SinaBlog_article_content(article_body)
 # # result = result_re.group('real_content')

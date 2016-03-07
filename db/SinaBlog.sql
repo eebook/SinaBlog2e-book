@@ -23,6 +23,7 @@ CREATE TABLE SinaBlog_Article (
   content      longtext      NOT NULL    DEFAULT '',
   comment      INT(20)       NOT NULL    DEFAULT 0,
   publish_date DATE          NOT NULL    DEFAULT '2000-01-01',
+  agree        VARCHAR(255) DEFAULT '无',
   PRIMARY KEY (article_id)
 );
 

@@ -11,7 +11,7 @@ from src.tools.http import Http
 
 class ImageContainer(object):
     u"""
-    根据href, 完成关于图片的各种操作
+    根据href, 完成关于图片的各种操作, 包括md5, 下载图片等
     """
 
     def __init__(self, save_path=''):
@@ -61,7 +61,6 @@ class ImageContainer(object):
                 'iterable': self.container, }
         Control.control_center(argv, self.container)
         return
-
 
     def create_image(self, href):
         u"""

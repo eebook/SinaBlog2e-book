@@ -24,18 +24,18 @@ class HtmlCreator(object):
             # if img[-1] == '/':
             #     print u"修改前,img为:" + str(img)
             #     img = img[:-1]
-            #     print u"修改后,img为:" + str(img)
+            #     print u"修改后,img为:" + str(img[:-1])
             img += '>'
             src = re.search(r'(?<=src=").*?(?=")', img)
             if not src:
                 new_image = img + '</img>'
+                print u"if not src"
                 content = content.replace(img, new_image)
                 continue
             else:
                 src = src.group(0)
                 if src.replace(' ', '') == '':
                     new_image = img + '</img>'
-                    print
                     content = content.replace(img, new_image)
                     continue
             src_download = HtmlCreator.fix_image_src(src)
@@ -43,16 +43,16 @@ class HtmlCreator(object):
                 filename = self.image_container.add(src_download)
             else:
                 filename = ''
-            # print u"src是什么?????" + str(src)
-            new_image = img.replace('"{}"'.format(src), '"./images/{}"'.format(filename))
+            new_image = img.replace('"{}"'.format(src), '"../images/{}"'.format(filename))
             new_image = new_image.replace('http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif',\
-                                          './images/{}'.format(filename)) # 硬编码, 可以优化?写到fix_html函数中
-            new_image += '</img>'
+                                          '../images/{}'.format(filename)) # 硬编码, 可以优化?写到fix_html函数中
+            # new_image += '</img>'
             content = content.replace(img, '<div class="duokan-image-single">{}</div>'.format(new_image))
+
         return content
 
     @staticmethod
-    def fix_image_src(href):          # TODO 这部分是针对知乎的
+    def fix_image_src(href):
         if Config.picture_quality == 0:
             return ''
         if 'equation?tex=' in href:  # tex图片需要额外加上http协议头
@@ -74,15 +74,13 @@ class HtmlCreator(object):
 
     def create_author_info(self, author_info):
         template = self.get_template('info', 'author')
-        # print u"author_info是" + str(author_info)       # TODO 这里不应该是info????
         return template.format(**author_info)
 
-    def wrap_title_info(self, title_image='', creator_name='', description='', creator_id='', **kwargs):
+    def wrap_title_info(self, title_image='', title='', description='', **kwargs):
         title_info = {
             'title_image': title_image,    # TODO
-            'title': creator_name,
+            'title': title,
             'description': description,
-            'creator_id': creator_id,
         }
         return title_info
 
@@ -90,42 +88,35 @@ class HtmlCreator(object):
         template = self.get_template('info', 'title')
         return template.format(**title_info)
 
-    def create_article(self, article):
+    def create_answer(self, answer):
         result = {
-            'article_info': self.create_author_info(article),
-            'comment': self.create_comment_info(article),      # TODO 这里指的是数量????
-            'content': article['content']
+            'author_info': self.create_author_info(answer),
+            'comment': self.create_comment_info(answer),
+            'content': answer['content']
         }
-
-        template = self.get_template('question', 'answer')      # 暂时先用这个名字
+        template = self.get_template('question', 'answer')
         return template.format(**result)
 
-    def create_SinaBlog(self, package, prefix=''):
-        SinaBlog = package['SinaBlog']        #
-        # Debug:
-        # article_list = package['SinaBlog_article_list']
-        # print u"在create_question中, article是什么???" + str(article_list)
-        # print (u"在create_question中, question是什么???" + str(SinaBlog))
-        article_content = ''.join([self.create_article(article) for article in package['SinaBlog_article_list']])
-        title_info = self.wrap_title_info(**SinaBlog)
-        # print u"在crate_Sinablog中, SinaBlog_Info为:" + str(SinaBlog)
-        # print u"在crate_Sinablog中, title_info为:" + str(title_info)
-        title_info['title'] = title_info['title'] + u"(ID{creator_id})的新浪博客".format(**title_info)
-        SinaBlog['SinaBlog_article_list'] = article_content
-        SinaBlog['SinaBlog'] = self.get_template('info', 'title').format(**title_info)
+    def create_article(self, article, prefix=''):
+        article['edit_date'] = article['publish_date']
+        article['description'] = ''
+        article['agree'] = 'wu'
+        # article['title_image'] = 'wu'
         result = {
-            'body': self.get_template('question', 'question').format(**SinaBlog),
-            'title': SinaBlog['creator_name']
+            'answer': self.create_answer(article),
+            'question': self.get_template('info', 'title').format(**article)
         }
-
+        question = self.get_template('question', 'question').format(**result)
+        result = {
+            'body': question,
+            'title': article['title'],
+        }
         content = self.get_template('content', 'base').format(**result)
         page = Page()
         page.content = self.fix_image(content)
-        # print u"page.content是???" + str(page.content)
-        page.filename = str(prefix) + '_' + str(SinaBlog['creator_id']) + '.xhtml'
-        page.title = SinaBlog['creator_name'] + u"的博客"
+        page.filename = str(prefix) + '_' + str(article['article_id']) + '.xhtml'
+        page.title = article['title']
         return page
-
 
     def wrap_front_page_info(self, kind, info):
         result = {}

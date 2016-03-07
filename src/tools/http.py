@@ -3,10 +3,14 @@
 import os
 import traceback
 import urllib2
+import urllib
 import socket  # 用于捕获超时错误
 import zlib
+import cookielib  # 用于生成cookie
+import time
 
 from src.tools.config import Config
+from src.tools.db import DB
 from src.tools.debug import Debug
 
 
@@ -24,13 +28,11 @@ class Http(object):
         :Exception: 解压缩页面失败时报错
         """
         header = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) \
-            AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36',
-        }
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36', }
         header.update(extra_header)
 
         if data:
-            data = url
+            data = urllib.urlencode(data)
         request = urllib2.Request(url=url, data=data)
         for key in header:
             request.add_header(key, header[key])
@@ -91,3 +93,38 @@ class Http(object):
             return ''
         return content
 
+    @staticmethod
+    def set_cookie(account=''):
+        if account == 'DontNeed':           # 如果不需要cookie, 一定要主动调用
+            return
+
+        def load_cookie(cookieJar, cookie):
+            filename = u'./theFileNameIsSoLongThatYouWontKnowWhatIsThat.txt'
+            with open(filename, 'w') as f:
+                f.write(cookie)
+            cookieJar.load(filename)
+            os.remove(filename)
+            return
+
+        jar = cookielib.LWPCookieJar()
+        if account:
+            result = DB.cursor.execute(
+                "select cookieStr, recordDate from LoginRecord order by recordDate desc where account = `{}`".format(
+                    account))
+        else:
+            result = DB.cursor.execute("select cookieStr, recordDate from LoginRecord order by recordDate desc")
+
+        result = result.fetchone()
+        cookie = result[0]
+        load_cookie(jar, cookie)
+        opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(jar))
+        urllib2.install_opener(opener)
+        return
+
+    @staticmethod
+    def make_cookie(name, value, domain):
+        cookie = cookielib.Cookie(version=0, name=name, value=value, port=None, port_specified=False, domain=domain,
+                                  domain_specified=True, domain_initial_dot=False, path="/", path_specified=True,
+                                  secure=False, expires=time.time() + 300000000, discard=False, comment=None,
+                                  comment_url=None, rest={})
+        return cookie

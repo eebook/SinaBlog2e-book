@@ -28,13 +28,13 @@ class Config(object):
     timeout_download_html = 5
     sql_extend_answer_filter = ''  # 附加到answer_sql语句后，用于对answer进行进一步的筛选（示例: and(agree > 5) ）
 
-    _config_store = {}
-
     @staticmethod
     def _save():
-        Config._sync()
         with open(Path.config_path, 'w') as f:
-            json.dump(Config._config_store, f, indent=4)
+            data = dict((
+                (key, Config.__dict__[key]) for key in Config.__dict__ if '_' not in key[:2]
+            ))
+            json.dump(data, f, indent=4)
         return
 
     @staticmethod
@@ -43,21 +43,13 @@ class Config(object):
             return
         with open(Path.config_path) as f:
             config = json.load(f)
+            if not config.get('remember_account'):
+                # 当选择不记住密码时，跳过读取，使用默认设置
+                # 不考虑用户强行在配置文件中把account改成空的情况
+                return
         for (key, value) in config.items():
             setattr(Config, key, value)
         return
-
-    @staticmethod
-    def _sync():
-        for attr in Config.__dict__:
-            if '_' not in attr[:2]:
-                Config._config_store[attr] = Config.__dict__[attr]
-        return
-
-    @staticmethod
-    def _print_config():
-        for attr in Config.__dict__:
-            print attr[:2]
 
 # test_config = Config()
 # print test_config._config_store

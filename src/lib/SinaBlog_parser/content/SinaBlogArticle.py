@@ -46,7 +46,7 @@ class SinaBlogArticle(ParserTools):
         获得博文的内容
         :return:
         """
-        article_body = self.dom.find('div', class_='artical', id='articlebody')
+        article_body = self.dom.find('div', class_='articalContent')
         # article_body = self.dom.find('div', class_='articalContent')
         # article_body = self.dom.find('div', id='sina_keyword_ad_area2')
         # article_body = self.dom.select('#sina_keyword_ad_area2')[0]
@@ -55,13 +55,8 @@ class SinaBlogArticle(ParserTools):
             Debug.logger.debug(u"博文内容没有找到")
             return
         article_body = str(article_body)
-        # lindex = article_body.find('<div class="articalTitle"')     # TODO: 改成正则表达式可能更好一点
-        rindex = article_body.find('<!-- 正文结束 -->')
-        article_body = article_body[:rindex]
-        # print u"获得的body为:" + str(article_body)
+        self.info['content'] = article_body
 
-        # print u"获得的body为:" + str(article_body[:rindex])
-        self.info['content'] = article_body[:rindex]
 
     def parse_author_id(self):   # TODO 这个部分可以不重复的
         u"""
@@ -121,7 +116,8 @@ class SinaBlogArticle(ParserTools):
         if not article_title:
             Debug.logger.debug(u"没有找到博文标题")
             return
-        self.info['title'] = article_title
+        # 标题里如果出现&会出错, 应该有更好的做法
+        self.info['title'] = article_title.replace('&', '&amp;')
 
 
 

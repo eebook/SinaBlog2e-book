@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import json
+
+import json  # 用于JsonWorker
 
 from src.tools.controler import Control
+from src.tools.db import DB
 from src.tools.debug import Debug
 from src.tools.http import Http
 from src.tools.match import Match
-from src.tools.db import DB
 
 from src.lib.SinaBlog_parser.SinaBlogparser import SinaBlogParser
 from src.lib.SinaBlog_parser.tools.parser_tools import ParserTools
@@ -20,8 +21,8 @@ class PageWorker(object):
         self.work_complete_set = set()   # 已完成网址池
         self.content_list = []           # 用于存放已抓取的内容
 
-        self.answer_list = []                # 存放文章的列表, 如果是SinaBlog的话, 对应的表是SinaBlog_Article
-        self.question_list = []         # 博客信息的list, 如果是SinaBlog的话, 对应的表是SinaBlog_Info
+        self.answer_list = []
+        self.question_list = []
 
         self.info_list = []
         self.extra_index_list = []
@@ -29,6 +30,7 @@ class PageWorker(object):
         self.info_url_complete_set = set()
 
         self.add_property()  # 添加扩展属性
+        # Http.set_cookie()
 
     def add_property(self):
 
@@ -36,13 +38,9 @@ class PageWorker(object):
 
     @staticmethod
     def parse_max_page(content):
-        u"""
-        :param content: 博客目录的页面内容
-        :return:
-        """
         max_page = 1
         try:
-            floor = content.index('">下一页</a>')
+            floor = content.index('">下一页</a></span>')
             floor = content.rfind('</a>', 0, floor)
             cell = content.rfind('>', 0, floor)
             max_page = int(content[cell + 1:floor])
@@ -52,14 +50,11 @@ class PageWorker(object):
         finally:
             return max_page
 
-    @staticmethod
-    def parse_blog_link_from_article_list(content):
+    def create_save_config(self):
         u"""
-        :param content: 某一页博客目录的内容
+        key 即为表名
         :return:
         """
-
-    def create_save_config(self):    # TODO
         config = {'Answer': self.answer_list, 'Question': self.question_list, }
         return config
 
@@ -69,7 +64,7 @@ class PageWorker(object):
         """
         return
 
-    def save(self):         # TODO
+    def save(self):
         self.clear_index()
         save_config = self.create_save_config()
         for key in save_config:
@@ -84,7 +79,7 @@ class PageWorker(object):
         self.start_create_work_list()
         self.start_worker()
         # print "answer_list!!!!!!!:" + str(self.answer_list)
-        self.save()  # bug??
+        self.save()
         return
 
     def create_work_set(self, target_url):
@@ -125,7 +120,11 @@ class PageWorker(object):
         self.work_complete_set.add(target_url)
         return
 
-    def parse_content(self, content):     # SinaBlogWorker重载了
+    def parse_content(self, content):
+        # parser = QuestionParser(content)
+        # self.question_list += parser.get_question_info_list()
+        # self.answer_list += parser.get_answer_list()
+
         return
 
     def start_worker(self):
@@ -164,6 +163,21 @@ class SinaBlogWorker(PageWorker):
     u"""
     Sina博客的worker
     """
+    @staticmethod
+    def parse_max_page(content):
+        u"""
+        :param content: 博客目录的页面内容
+        :return:
+        """
+        max_page = 1
+        try:
+             floor = content.index('">下一页</a>')
+             floor = content.rfind('</a>', 0, floor)
+             cell = content.rfind('>', 0, floor)
+             max_page = int(content[cell + 1:floor])
+        finally:
+            return max_page
+
     def create_save_config(self):    # TODO
         config = {'SinaBlog_Article': self.answer_list, 'SinaBlog_Info': self.question_list, }
         return config
@@ -256,8 +270,8 @@ class SinaBlogWorker(PageWorker):
 def worker_factory(task):
     type_list = {'SinaBlog': SinaBlogWorker, 'SinaBlogAuthor': SinaBlogAuthorWorker}
     for key in task:
-        # Debug.logger.debug(u"在worker_factory中, key:" + str(key))
-        # Debug.logger.debug(u"在worker_factory中, task[key]:" + str(task[key]))
+        Debug.logger.debug(u"在worker_factory中, key:" + str(key))
+        Debug.logger.debug(u"在worker_factory中, task[key]:" + str(task[key]))
         worker = type_list[key](task[key])
         worker.start()
     return

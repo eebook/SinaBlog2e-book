@@ -45,6 +45,7 @@ class InitialBook(object):
     class Epub(object):
         def __init__(self):
             self.article_count = 0
+            self.answer_count = 0
             self.char_count = 0
 
             self.title = ''
@@ -111,46 +112,35 @@ class InitialBook(object):
 
     def get_article_list(self):
         if self.kind in Type.SinaBlog:
-            article_list = self.__get_SinaBlog_list()
+            article_list = self.__get_article_list()
         self.set_article_list(article_list)
         return
 
-    def __get_SinaBlog_list(self):
-        SinaBlog_list = [DB.wrap('SinaBlog_Info', x) for x in DB.get_result_list(self.sql.info)]
-        SinaBlog_article_list = [DB.wrap('SinaBlog_Article', x) for x in DB.get_result_list(self.sql.article)]
+    def __get_article_list(self):
+        def add_property(article):
+            article['char_count'] = len(article['content'])
+            article['answer_count'] = 1
+            if self.kind == Type.SinaBlog:
+                article['agree_count'] = "没有赞同数" #article['agree']
+                article['update_date'] = article['publish_date']
+            return article
+        if self.kind == Type.SinaBlog:
+            article_list = [DB.wrap(Type.SinaBlog_Article, x) for x in DB.get_result_list(self.sql.get_answer_sql())]
 
-        def merge_article_into_SinaBlog():
-            SinaBlog_dict = {item['creator_id']: {'SinaBlog': item.copy(), 'SinaBlog_article_list': [], }
-                             for item in SinaBlog_list}
-
-            for SinaBlog_article in SinaBlog_article_list:
-                SinaBlog_dict[SinaBlog_article['author_id']]['SinaBlog_article_list'].append(SinaBlog_article)
-            return SinaBlog_dict.values()
-
-        def add_property(SinaBlog):
-            char_count = 0
-            # TODO comment_count
-            for SinaBlog_article in SinaBlog['SinaBlog_article_list']:
-                SinaBlog_article['char_count'] = len(SinaBlog_article['content'])
-                SinaBlog_article['update_date'] = SinaBlog_article['publish_date']
-                char_count += SinaBlog_article['char_count']
-            SinaBlog['article_count'] = len(SinaBlog['SinaBlog_article_list'])
-            SinaBlog['char_count'] = char_count
-            return SinaBlog
-        article_list = [add_property(x) for x in merge_article_into_SinaBlog() if len(x['SinaBlog_article_list'])]
+        article_list = [add_property(x) for x in article_list]
         return article_list
 
     def set_article_list(self, article_list):
         self.clear_property()
         if self.kind == Type.SinaBlog:      # SinaBlog类型
             for article in article_list:
-                self.epub.article_count += article['article_count']
+                self.epub.answer_count += article['answer_count']
                 self.epub.char_count += article['char_count']
-            # self.epub.article_count = len(article_list)     # 不然,一个博客就是一个article_count
         self.article_list = article_list
         return
 
     def clear_property(self):
+        self.epub.answer_count = 0
         # self.epub.title = ''
         # self.epub.prefix = ''
         self.epub.char_count = 0

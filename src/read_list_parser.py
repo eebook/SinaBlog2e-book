@@ -39,6 +39,7 @@ class ReadListParser():
         raw_task_list = []
         for command in command_list:
             raw_task = ReadListParser.parse_command(command)
+            Debug.logger.debug(u"raw_task是???" + str(raw_task))
             if raw_task:
                 raw_task_list.append(raw_task)
 
@@ -85,13 +86,13 @@ class ReadListParser():
             task.author_id = SinaBlog_author_id
             task.kind = 'SinaBlog'
             task.spider.href_article_list = 'http://blog.sina.com.cn/s/articlelist_{}_0_1.html'.format(SinaBlog_author_id)
-            task.spider.href_index = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
+            task.spider.href = 'http://blog.sina.com.cn/u/{}'.format(SinaBlog_author_id)
             task.spider.href_profile = 'http://blog.sina.com.cn/s/profile_{}.html'.format(SinaBlog_author_id)
             task.book.kind = 'SinaBlog'
             task.book.sql.info_extra = 'creator_id = "{}"'.format(SinaBlog_author_id)
             task.book.sql.article_extra = 'author_id = "{}"'.format(SinaBlog_author_id)
             task.book.author_id = SinaBlog_author_id
-            # Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
+            Debug.logger.debug(u"在parse_SinaBlog中, task.book.author_id为" + str(task.book.author_id))
             return task
 
         def parse_error(command):
@@ -108,6 +109,6 @@ class ReadListParser():
     def merge_task_list(task_list):
         task_package = TaskPackage()
         for item in task_list:
-            Debug.logger.debug(u"merge_task_list中的item是什么???" + str(item))
+            # Debug.logger.debug(u"merge_task_list中的item是什么???" + str(item))
             task_package.add_task(item)
         return task_package.get_task()
