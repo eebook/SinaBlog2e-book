@@ -12,10 +12,8 @@ class Config(object):
     # 全局变量
     update_time = '2016-01-01'  # 更新日期, TODO:暂时用不到到
 
-    debug = True
+    debug = False
 
-    account = 'zhihu2ebook@hotmail.com'  # 账号密码, TODO:暂时没有用到
-    password = 'Zhihu2Ebook'
     remember_account = False  # 是否使用已有密码
 
     max_thread = 10         # 最大线程数

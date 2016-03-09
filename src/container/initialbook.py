@@ -56,7 +56,7 @@ class InitialBook(object):
 
     def __init__(self):
         self.kind = ''
-        self.author_id = 0                  # SinaBlog特有
+        self.author_id = 0                 
         self.sql = InitialBook.Sql()
         self.epub = InitialBook.Epub()
         self.info = {}
@@ -104,7 +104,6 @@ class InitialBook(object):
         self.info.update(info)
         if self.kind == Type.SinaBlog:              # 该博客所有的博文
             self.epub.title = u'新浪博客_{}({})'.format(info['creator_name'], info['creator_id'])
-            print (u"self.epub.title没有设置???" + str(self.epub.title))
             self.epub.id = info['creator_id']
         elif self.kind == Type.SinaBlog_Article:    # 单篇博文 TODO
             self.epub.title = u'新浪博客博文集锦({})'.format(info['title'])

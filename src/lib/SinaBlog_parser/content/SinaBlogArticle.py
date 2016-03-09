@@ -27,7 +27,6 @@ class SinaBlogArticle(ParserTools):
 
     def get_info(self):
         answer_info = self.parse_info()
-        # TODO
         return answer_info
 
     def parse_info(self):
@@ -57,8 +56,7 @@ class SinaBlogArticle(ParserTools):
         article_body = str(article_body)
         self.info['content'] = article_body
 
-
-    def parse_author_id(self):   # TODO 这个部分可以不重复的
+    def parse_author_id(self):       # TODO 这个部分可以不重复的
         u"""
         获得author_id
         :return:
@@ -70,7 +68,6 @@ class SinaBlogArticle(ParserTools):
 
         if not author_id_href:
             Debug.logger.debug(u"没有找到creator_id")
-            # TODO
             return
         result = Match.SinaBlog_profile(author_id_href)
         SinaBlog_id = result.group('SinaBlog_people_id')
@@ -84,7 +81,6 @@ class SinaBlogArticle(ParserTools):
         author_name = self.dom.select('div.info_nm span strong')       # 获得creator_name
         if not author_name:
             Debug.logger.debug(u"没有找到博主姓名")
-            # TODO: 变量命名可以改一下
             return
         author_name = author_name[0].get_text().replace(' ', '').replace('\n', '').replace('\t', '').replace('\r', '')
         self.info['author_name'] = author_name
@@ -117,10 +113,5 @@ class SinaBlogArticle(ParserTools):
             Debug.logger.debug(u"没有找到博文标题")
             return
         # 标题里如果出现&会出错, 应该有更好的做法
-        self.info['title'] = article_title.replace('&', '&amp;')
-
-
-
-
-
+        self.info['title'] = article_title.replace('&', '&amp;').replace('<<', "《").replace('>>', "》")
 

@@ -29,7 +29,6 @@ class HtmlCreator(object):
             src = re.search(r'(?<=src=").*?(?=")', img)
             if not src:
                 new_image = img + '</img>'
-                print u"if not src"
                 content = content.replace(img, new_image)
                 continue
             else:

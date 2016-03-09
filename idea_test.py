@@ -128,7 +128,6 @@ print article_body
 # if not description:
     # Debug.logger.debug(u"没有找到个人简介")
     # return
-    # TODO: 完善一下..
 # description = description[1].get_text().replace(' ', '').replace('\n', '').replace('\t', '').replace('\r', '')
 # self.info['description'] = description
 # print description

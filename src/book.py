@@ -70,7 +70,6 @@ class Book(object):
         counter = 0
         book = []
         book_list = []
-        # Debug.logger.info(u"raw_book_list的长度是???" + str(len(raw_book_list)))
         while len(raw_book_list):
             raw_book = raw_book_list.pop()
             if not raw_book.epub.answer_count:
@@ -141,18 +140,17 @@ class Book(object):
             # 否则会发生『rm -rf / 』的惨剧
             return
         Path.chdir(Path.base_path + u'/电子书临时资源库')
-        # print (u"title是???" + title)
         epub = Epub(title)
         html_tmp_path = Path.html_pool_path + u'/'
         image_tmp_path = Path.image_pool_path + u'/'
-        epub.set_creator(u'EEBookV0-1')
+        epub.set_creator(u'SinaBlogV01')
         epub.set_book_id()
         epub.set_output_path(Path.result_path)
         epub.add_css(Path.base_path + u'/www/css/markdown.css')
         epub.add_css(Path.base_path + u'/www/css/customer.css')
         epub.add_css(Path.base_path + u'/www/css/normalize.css')
         epub.add_css(Path.base_path + u'/www/css/bootstrap.css')
-        epub.add_css(Path.base_path + u'/www/css/article.css')    # TODO: 来自新浪,需要精简
+        # epub.add_css(Path.base_path + u'/www/css/article.css')    # TODO: 来自新浪,需要精简
         for book in book_package.book_list:
             page = book.page_list[0]
             with open(html_tmp_path + page.filename, u'w') as html:
@@ -194,8 +192,9 @@ class Book(object):
         Path.copy(Path.www_css + u'/customer.css', u'./customer.css')
         Path.copy(Path.www_css + u'/markdown.css', u'./markdown.css')
         Path.copy(Path.www_css + u'/normalize.css', u'./normalize.css')
-        Path.copy(Path.www_css + u'/article.css', u'./article.css')         # TODO: 需要精简
+        # Path.copy(Path.www_css + u'/article.css', u'./article.css')         # TODO: 需要精简
         Path.reset_path()
+
         return
 
     def create(self):

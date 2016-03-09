@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import logging
-import logging.handlers
 import sys
 
 from src.tools.config import Config

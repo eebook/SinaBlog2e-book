@@ -63,7 +63,6 @@ class SinaBloeAuthorInfo(ParserTools):
         description = self.dom.select('table.personTable tbody tr td p')
         if not description:
             Debug.logger.debug(u"没有找到个人简介")
-            # TODO: 完善一下..
             return
         description = description[1].get_text().replace(' ', '').replace('\n', '').replace('\t', '').replace('\r', '')
         self.info['description'] = description
@@ -94,7 +93,6 @@ class SinaBloeAuthorInfo(ParserTools):
 
         if not creator_id_href:
             Debug.logger.debug(u"没有找到creator_id")
-            # TODO
             return
         result = Match.SinaBlog_profile(creator_id_href)
         SinaBlog_id = result.group('SinaBlog_people_id')

@@ -39,7 +39,6 @@ class ReadListParser():
         raw_task_list = []
         for command in command_list:
             raw_task = ReadListParser.parse_command(command)
-            Debug.logger.debug(u"raw_task是???" + str(raw_task))
             if raw_task:
                 raw_task_list.append(raw_task)
 
@@ -101,7 +100,7 @@ class ReadListParser():
             return
 
         parser = {'SinaBlog': parse_SinaBlog,
-                  'unknown': parse_error,}
+                  'unknown': parse_error}
         kind = detect(raw_command)
         return parser[kind](raw_command)
 

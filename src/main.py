@@ -34,7 +34,7 @@ class SinaBlog(object):
         程序运行的主函数
         :return:
         """
-        Debug.logger.info(u"#Debug模式#: 不检查更新")
+        Debug.logger.debug(u"#Debug模式#: 不检查更新")
         self.init_config()
         Debug.logger.info(u"开始读取ReadList.txt的内容")
         with open('./ReadList.txt', 'r') as read_list:
@@ -55,14 +55,12 @@ class SinaBlog(object):
         task_package = ReadListParser.get_task(command)     # 分析命令
 
         if not task_package.is_work_list_empty():
-            Debug.logger.debug(u"work_list是???" + str(task_package.work_list))
             worker_factory(task_package.work_list)  # 执行抓取程序
             Debug.logger.info(u"网页信息抓取完毕")
 
         if not task_package.is_book_list_empty():
             Debug.logger.info(u"开始从数据库中生成电子书")
             Debug.logger.debug(u"task_package.book_list.sql.info:" + str((task_package.book_list[Type.SinaBlog][0]).sql.info))  #.sql.info))
-            # Debug.logger.debug(u"task_package.book_list.sql.article:" + str((task_package.book_list[Type.SinaBlog][0]).sql.article))  #.sql.info))
             book = Book(task_package.book_list)
             book.create()
         return

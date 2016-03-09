@@ -178,7 +178,7 @@ class SinaBlogWorker(PageWorker):
         finally:
             return max_page
 
-    def create_save_config(self):    # TODO
+    def create_save_config(self):
         config = {'SinaBlog_Article': self.answer_list, 'SinaBlog_Info': self.question_list, }
         return config
 
