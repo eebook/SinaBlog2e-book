@@ -1,6 +1,5 @@
 # SinaBlog2e-book
 ===
-
 ## 简介
 ===
 将新浪博客的所有文章爬取下来，制作成Epub格式的电子书（同时生成html格式文件）  
@@ -13,20 +12,19 @@
  * [Beautiful Soup 4](http://www.crummy.com/software/BeautifulSoup/)
  * [lxml](http://lxml.de/)     
 
-### 解决依赖： 
- ```shell
+### 解决依赖:
+```shell
 $ sudo pip install -r requirements.txt
 ```
 
 ## 开发环境
-===
 Mac 10.11   
 Python 	2.7.11    
 BeautifulSoup 4    
 PyCharm CE 5.0.3  
 目前完成度不高，bug还比较多，Win，Linux平台下还没有测试过，有可能存在问题。
 
-## 使用说明 
+## 使用说明
 ===
 1. 将博客地址放入项目文件夹目录的ReadList.txt中，例如：  
 ![readlist](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBlogReadList.png?imageView/2/w/619/q/90)
@@ -46,7 +44,7 @@ $ python SinaBlog2e-book.py
 
 [参与](./CONTRIBUTING.md)
 
-## TODO list  
+## TODO list
 ===
 本着「过早优化是万恶之源」的原则（好吧，就是代码写得烂），目前这个项目还算能用，但是问题也比较多，写个TODO list: 
 
