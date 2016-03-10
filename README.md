@@ -15,6 +15,7 @@
 ### 解决依赖： 
  ```shell
 $ sudo pip install -r requirements.txt
+```
 
 ## 开发环境
 ===
