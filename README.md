@@ -1,11 +1,13 @@
 # SinaBlog2e-book
 ## 简介
+---
 将新浪博客的所有文章爬取下来，制作成Epub格式的电子书（同时生成html格式文件）  
 </br>
 例如，爬取[韩寒的新浪博客](http://blog.sina.com.cn/u/1191258123)的所有文章：   
 ![hanhanepub](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBloghanhanepub.png?imageView/2/w/800/q/90)    
 
 ## 依赖
+---
  * [Beautiful Soup 4](http://www.crummy.com/software/BeautifulSoup/)
  * [lxml](http://lxml.de/)     
 
@@ -15,6 +17,7 @@ $ sudo pip install -r requirements.txt
 ```
 
 ## 开发环境
+---
 Mac 10.11   
 Python 	2.7.11    
 BeautifulSoup 4    
@@ -22,6 +25,7 @@ PyCharm CE 5.0.3
 目前完成度不高，bug还比较多，Win，Linux平台下还没有测试过，有可能存在问题。
 
 ## 使用说明
+---
 1. 将博客地址放入项目文件夹目录的ReadList.txt中，例如：  
 ![readlist](http://7xi5vu.com1.z0.glb.clouddn.com/2016-02-02-SinaBlogReadList.png?imageView/2/w/619/q/90)
 需要说明的一点是：目前只支持ID形式的博客地址，例如http://blog.sina.com.cn/u/1191258123。新浪微博支持多种形式的地址，如：http://blog.sina.com.cn/1191258123, http://blog.sina.com.cn/twocold, 以及http://blog.sina.com.cn/u/1191258123. 目前只支持一种，后面会改进。
@@ -35,11 +39,13 @@ $ python SinaBlog2e-book.py
 
 
 ## 项目说明
+---
 **该项目只是[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)的新浪博客版本，目前大量用到[ZhihuHelp](https://github.com/YaoZeyuan/ZhihuHelp)项目的代码，再次表示感谢。也请大家多多支持该项目作者[姚泽源](https://github.com/YaoZeyuan)同学。**
 
 [参与](./CONTRIBUTING.md)
 
 ## TODO list
+---
 本着「过早优化是万恶之源」的原则（好吧，就是代码写得烂），目前这个项目还算能用，但是问题也比较多，写个TODO list: 
 
 0. 支持多种形式的新浪博客地址 
@@ -53,4 +59,5 @@ $ python SinaBlog2e-book.py
 8. ....
 
 ## License
-[MIT](http://opensource.org/licenses/MIT)
+---
+[MIT](./LICENSE)
